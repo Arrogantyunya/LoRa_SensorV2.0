@@ -10,7 +10,7 @@
 #define RED_PIN             PB9
 
 #define K1                  PB0 //Button1
-#define K2                  PA8 //Button2
+#define K2                  PB4 //Button2
 
 #define USBEN_PIN           PB3
 

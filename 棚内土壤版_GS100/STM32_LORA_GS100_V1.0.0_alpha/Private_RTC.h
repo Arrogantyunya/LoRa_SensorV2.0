@@ -2,6 +2,7 @@
 #define _PRIVATE_RTC_H
 
 #include "User_Clock.h"
+#include <Arduino.h>
 #include <RTClock.h>
 
 class date{

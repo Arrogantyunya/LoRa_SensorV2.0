@@ -44,7 +44,7 @@ unsigned char g_SN_Code[9] = { 0x00 }; //
 
 
 /*----------Function statement----------*/
-void Sleep(void);
+//void Sleep(void);
 
 
 // The setup() function runs once each time the micro-controller starts
@@ -72,27 +72,28 @@ void setup()
 	//delay(10);
 
 #if SOFT_HARD_VERSION
+	Serial.println("");
 	//软件版本存储程序
-	if (Software_version_high != Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR) &&
-		Software_version_low != Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1))
+	if (Software_version_high == Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR) &&
+		Software_version_low == Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1))
+	{
+		Serial.println(String("当前的软件版本为V") + Software_version_high + "." + Software_version_low);
+	}
+	else
 	{
 		Vertion.Save_Software_version(Software_version_high, Software_version_low);
 		Serial.println(String("成功存储软件版本，当前的软件版本为V") + Software_version_high + "." + Software_version_low);
 	}
-	else
+	//硬件版本存储程序
+	if (Hardware_version_high == Vertion.Read_hardware_version(HARD_VERSION_BASE_ADDR) &&
+		Hardware_version_low == Vertion.Read_hardware_version(HARD_VERSION_BASE_ADDR + 1))
 	{
-		Serial.println(String("当前的软件版本为V") + Software_version_high + "." + Software_version_low);
+		Serial.println(String("当前的硬件版本为V") + Hardware_version_high + "." + Hardware_version_low);
 	}
-	//硬件版本
-	if (Hardware_version_high != Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR) &&
-		Hardware_version_low != Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR + 1))
+	else
 	{
 		Vertion.Save_hardware_version(Hardware_version_high, Hardware_version_low);
-		Serial.println(String("成功存储硬件版本，当前的软件版本为V") + Software_version_high + "." + Software_version_low);
-	}
-	else
-	{
-		Serial.println(String("当前的硬件版本为V") + Software_version_high + "." + Software_version_low);
+		Serial.println(String("成功存储硬件版本，当前的硬件版本为V") + Hardware_version_high + "." + Hardware_version_low);
 	}
 #endif
 
@@ -109,6 +110,7 @@ void setup()
 	}
 
 	SN.Clear_SN_Access_Network_Flag();
+
 	Request_Access_Network();
 
 	while (SN.Self_Check(g_SN_Code) == false)
@@ -138,12 +140,13 @@ void setup()
 	//-----极低电压不发送数据
 
 
-
+	Serial.println("12344556");
 	Data_Communication_with_Gateway();
 
 	if (Some_Peripheral.Get_Voltage() >= 3300)
 	{
 		LowBalFlag = 0;
+		//Serial.println("LowBalFlag = 0");
 	}
 	else
 	{
@@ -152,21 +155,19 @@ void setup()
 		if (Some_Peripheral.Get_Voltage() <= 3000)
 		{
 			LowBalFlag = 2;//如果电压小于2900mV
+			//Serial.println("LowBalFlag = 0");
 		}
 	}
 
 	Private_RTC.Set_Alarm();
+	Serial.println("~~~~~~~~");
 }
 
 // Add the main program code into the continuous loop() function
 void loop()
 {
+	//nvic_sys_reset();
 	Sleep();
-	//USB_ON; //Turn on the USB enable
-	//delay(10);
-	//setup();
-	//Serial.println("ddddddd");
-	//delay(1000);
 }
 
 
@@ -234,10 +235,13 @@ void Data_Communication_with_Gateway(void)
 
 		wait_time = millis();
 
-	} while (Get_Para_num < 3);
+	} while (Get_Para_num < 1);
 
-	if (Get_Para_num == 3) //If it don't receive message three times.
-		Serial.println("No parameter were received !!!");
+	if (Get_Para_num == 1) //If it don't receive message three times.
+	{
+		Serial.println("No parameter were received!!!");
+		Serial.println("//////////////////");
+	}
 }
 
 /*
@@ -248,6 +252,8 @@ void Data_Communication_with_Gateway(void)
 void Sleep(void)
 {
 	Serial.println("Enter Sleep>>>>>>");
+	delay(1000);
+	//Serial.flush();
 	Some_Peripheral.Stop_LED();
 	PWR_485_OFF;
 	LORA_PWR_OFF;
@@ -260,14 +266,18 @@ void Sleep(void)
 
 void Key_Reset_LoRa_Parameter(void)
 {
-	if (digitalRead(K1) == LOW) {
+	if (digitalRead(K1) == LOW) 
+	{
 		delay(100);
-		if (digitalRead(K1) == LOW) {
+		if (digitalRead(K1) == LOW) 
+		{
 			//Some_Peripheral.Key_Buzz(600);
 			delay(5000);
-			if (digitalRead(K2) == LOW) {
+			if (digitalRead(K2) == LOW) 
+			{
 				delay(100);
-				if (digitalRead(K2) == LOW) {
+				if (digitalRead(K2) == LOW) 
+				{
 					//Some_Peripheral.Key_Buzz(600);
 					LoRa_Para_Config.Clear_LoRa_Config_Flag();
 					Serial.println("Clear LoRa configuration flag SUCCESS... <Key_Reset_LoRa_Parameter>");

@@ -620,7 +620,8 @@ void Receipt::Send_Sensor_Data(void)
 	for (unsigned char i = 0; i < 6; i++)
 		i % 2 == 0 ? Sensor_Buffer[Receipt_Length++] = 0x0D : Sensor_Buffer[Receipt_Length++] = 0x0A;
 
-	Serial.println("LoRa sensor data receipt...");
+	Serial.println("LoRa sensor data receipt..."); 
+	Serial.println("LORA传感器数据接收...");
 	Print_Debug(&Sensor_Buffer[0], Receipt_Length);
 
 	Some_Peripheral.Stop_LED();

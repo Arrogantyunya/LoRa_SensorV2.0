@@ -92,7 +92,7 @@ void Command_Analysis::Receive_LoRa_Cmd(void)
     }
   }
   if (Receive_end_flag == true){
-    Serial.println("Parsing LoRa command... <Receive_LoRa_Cmd>");
+    Serial.println("Parsing LoRa command... <Receive_LoRa_Cmd>解析命令……");
     Receive_end_flag = false;
     Receive_Data_Analysis();//接收数据分析
     g_Receive_Length = 0;

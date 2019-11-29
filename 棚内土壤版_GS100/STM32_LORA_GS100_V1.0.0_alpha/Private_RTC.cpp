@@ -1,4 +1,4 @@
-#include "Private_RTC.h"
+﻿#include "Private_RTC.h"
 #include <Arduino.h>
 #include "Memory.h"
 #include "public.h"
@@ -162,17 +162,20 @@ void date::Set_Alarm(void)
 		if (LowBalFlag == 1)
 		{
 			alarm += 1200;  //如果电压过低，强制休眠20分钟
-			Serial.println(String("没有收到服务器的参数设置！！电池电压低，自动修订的间隔休眠时间为：Time_temp = 1200s"));
+			Serial.println("没有收到服务器的参数设置！！");
+			Serial.println(String("电池电压低，自动修订的间隔休眠时间为：Time_temp = 1200s"));
 		}
 		else if (LowBalFlag == 2)
 		{
 			alarm += 2400;  //如果电压过低，强制休眠20分钟
-			Serial.println(String("没有收到服务器的参数设置！！电池电压极低！！！自动修订的间隔休眠时间为：Time_temp = 2400s"));
+			Serial.println("没有收到服务器的参数设置！！");
+			Serial.println(String("电池电压极低！！！自动修订的间隔休眠时间为：Time_temp = 2400s"));
 		}
 		else
 		{
-			alarm += 180;
-			Serial.println(String("没有收到服务器的参数设置！！电池电压正常，自动修订的间隔休眠时间为：Time_temp = 180s"));
+			alarm += 18;
+			Serial.println("没有收到服务器的参数设置！！");
+			Serial.println(String("电池电压正常，自动修订的间隔休眠时间为：Time_temp = 18s"));
 		}
 	}
 

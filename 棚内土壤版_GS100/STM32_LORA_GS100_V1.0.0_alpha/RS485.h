@@ -5,7 +5,7 @@
 
 #define RS485_Serial          Serial2
 
-#define RS485_PWR_PIN       PB4 //power
+#define RS485_PWR_PIN       PA8 //power
 
 #define PWR_485_ON      (digitalWrite(RS485_PWR_PIN, HIGH))
 #define PWR_485_OFF     (digitalWrite(RS485_PWR_PIN, LOW))
