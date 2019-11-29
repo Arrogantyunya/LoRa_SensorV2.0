@@ -465,7 +465,7 @@ void LoRa::Parameter_Init(void)
         StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_TFREQ, "1C578DE0");
         StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_RFREQ, "1C03AE80");     
         StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_RIQ, "00"); 
-        StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_NET, "01"); 
+        StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_NET, "00"); 
         StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_TSF, "09"); 
         StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_RSF, "09"); 
         StatusBuffer[i++] = LoRa_AT(RcvBuffer, false, AT_SIP, "01"); 

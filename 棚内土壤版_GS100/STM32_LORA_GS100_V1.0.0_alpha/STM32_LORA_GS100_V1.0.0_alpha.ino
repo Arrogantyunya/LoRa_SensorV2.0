@@ -26,6 +26,10 @@
 //
 #define test_time 2000 
 #define SOFT_HARD_VERSION 1
+#define Software_version_high	0x01
+#define Software_version_low	0x00
+#define Hardware_version_high	0x07
+#define Hardware_version_low	0x00
 
 // Define Functions below here or use other .ino or cpp files
 //
@@ -68,8 +72,28 @@ void setup()
 	//delay(10);
 
 #if SOFT_HARD_VERSION
-	Vertion.Save_Software_version(0x01, 0x00);
-	Vertion.Save_hardware_version(0x07, 0x00);
+	//软件版本存储程序
+	if (Software_version_high != Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR) &&
+		Software_version_low != Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1))
+	{
+		Vertion.Save_Software_version(Software_version_high, Software_version_low);
+		Serial.println(String("成功存储软件版本，当前的软件版本为V") + Software_version_high + "." + Software_version_low);
+	}
+	else
+	{
+		Serial.println(String("当前的软件版本为V") + Software_version_high + "." + Software_version_low);
+	}
+	//硬件版本
+	if (Hardware_version_high != Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR) &&
+		Hardware_version_low != Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR + 1))
+	{
+		Vertion.Save_hardware_version(Hardware_version_high, Hardware_version_low);
+		Serial.println(String("成功存储硬件版本，当前的软件版本为V") + Software_version_high + "." + Software_version_low);
+	}
+	else
+	{
+		Serial.println(String("当前的硬件版本为V") + Software_version_high + "." + Software_version_low);
+	}
 #endif
 
 	Key_Reset_LoRa_Parameter();
