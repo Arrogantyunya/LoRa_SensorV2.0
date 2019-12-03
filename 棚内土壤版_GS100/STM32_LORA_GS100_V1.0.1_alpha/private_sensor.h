@@ -15,19 +15,19 @@
 #define IT_4   0x3 //4T
 
 struct SENSOR_DATA{
-  float             g_Temp;//ÎÂ¶È
+  float             g_Temp;//æ¸©åº¦
   unsigned char     g_Temp_Flag;//
-  float             g_Humi;//Ïà¶ÔÊª¶È
-  unsigned long int g_Lux;//¹âÕÕÇ¿¶È
-  unsigned int      g_Solid_Temp;//ÍÁÈÀÎÂ¶È
+  float             g_Humi;//ç›¸å¯¹æ¹¿åº¦
+  unsigned long int g_Lux;//å…‰ç…§å¼ºåº¦
+  unsigned int      g_Solid_Temp;//åœŸå£¤æ¸©åº¦
   unsigned char     g_Solid_Temp_Flag;//
-  float             g_Solid_Humi;//ÍÁÈÀÊª¶È
-  unsigned int      g_Salt;//ÍÁÈÀÑÎ·Ö
-  unsigned int      g_Cond;//ÍÁÈÀµçµ¼ÂÊ
-  unsigned int      g_UV;//×ÏÍâÏßÇ¿¶È
-  unsigned int      g_Solid_PH;//´óÆøÑ¹Á¦£¨¸ÄÎªÁËÍÁÈÀPHÖµ£©
-  //¶şÑõ»¯Ì¼Å¨¶È
-  //TVOCsÅ¨¶È
+  float             g_Solid_Humi;//åœŸå£¤æ¹¿åº¦
+  unsigned int      g_Salt;//åœŸå£¤ç›åˆ†
+  unsigned int      g_Cond;//åœŸå£¤ç”µå¯¼ç‡
+  unsigned int      g_UV;//ç´«å¤–çº¿å¼ºåº¦
+  unsigned int      g_Solid_PH;//å¤§æ°”å‹åŠ›ï¼ˆæ”¹ä¸ºäº†åœŸå£¤PHå€¼ï¼‰
+  //äºŒæ°§åŒ–ç¢³æµ“åº¦
+  //TVOCsæµ“åº¦
 };
 
 class Sensor{

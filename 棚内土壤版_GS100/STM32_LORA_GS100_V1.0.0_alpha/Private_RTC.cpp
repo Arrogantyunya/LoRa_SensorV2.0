@@ -173,9 +173,9 @@ void date::Set_Alarm(void)
 		}
 		else
 		{
-			alarm += 18;
+			alarm += 10;
 			Serial.println("没有收到服务器的参数设置！！");
-			Serial.println(String("电池电压正常，自动修订的间隔休眠时间为：Time_temp = 18s"));
+			Serial.println(String("电池电压正常，自动修订的间隔休眠时间为：Time_temp = 10s"));
 		}
 	}
 

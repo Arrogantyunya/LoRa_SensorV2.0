@@ -13,9 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{5aeb344f-0510-492d-be2f-b96796d6ba55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly">
+      <UniqueIdentifier>{25ed6bd9-162e-47d7-a065-e1d80fc4377e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core">
+      <UniqueIdentifier>{41f246f7-2572-4d3f-91a0-2d15fa4fe508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\avr">
+      <UniqueIdentifier>{a40500f1-e3b8-402b-90e6-e8de21147b23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libmaple">
+      <UniqueIdentifier>{8dd13de5-62bf-471f-bb88-3cfa1d2f7d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libmaple\stm32f1">
+      <UniqueIdentifier>{45daf95c-ed2b-46dd-ac3c-ba675d88582a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libmaple\stm32f1\performance">
+      <UniqueIdentifier>{2e42f080-139b-43c9-86b4-945cad119e24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libmaple\usb">
+      <UniqueIdentifier>{18000875-74f1-4653-93e5-93439c2c9da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libmaple\usb\stm32f1">
+      <UniqueIdentifier>{624671f8-1346-476b-8051-67a032029d2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libmaple\usb\usb_lib">
+      <UniqueIdentifier>{f87ae31b-c1bb-45e8-be9b-678e8342f4a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\stm32f1">
+      <UniqueIdentifier>{a0df6286-4823-4ba9-9aed-9c4032f3c5fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries">
+      <UniqueIdentifier>{78935d96-97a7-4ee3-9135-ed82cbc885c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\RTClock">
+      <UniqueIdentifier>{7b3d4648-357b-435e-9f95-0f0f9fe06a20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="STM32_LORA_GS100_V1.0.1_alpha.ino" />
+    <None Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\RTClock</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.STM32_LORA_GS100_V1.0.1_alpha.vsarduino.h">
@@ -72,6 +114,120 @@
     <ClInclude Include="User_CRC8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Arduino.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\bits.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\bit_constants.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\boards.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\boards_private.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Client.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\ext_interrupts.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\HardwareSerial.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\HardwareTimer.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\io.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\IPAddress.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\itoa.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Print.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Printable.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\pwm.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Server.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Stream.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\tone.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Udp.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\usb_serial.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\WCharacter.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wiring_private.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wiring_pulse.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_constants.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_debug.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_math.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_time.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_types.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\WProgram.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\WString.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\avr\dtostrf.h">
+      <Filter>src\_micro-api-readonly\core\avr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\avr\interrupt.h">
+      <Filter>src\_micro-api-readonly\core\avr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\avr\pgmspace.h">
+      <Filter>src\_micro-api-readonly\core\avr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\variants\generic_stm32f103c\pins_arduino.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\variants\generic_stm32f103c\variant.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src\RTClock.h">
+      <Filter>src\_micro-api-readonly\libraries\RTClock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src\utility\rtc_util.h">
+      <Filter>src\_micro-api-readonly\libraries\RTClock</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AT24CXX.cpp">
@@ -119,5 +275,88 @@
     <ClCompile Include="User_CRC8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\cxxabi-compat.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\ext_interrupts.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\HardwareSerial.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\HardwareTimer.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\hooks.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\IPAddress.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\itoa.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\main.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\new.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Print.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\pwm.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\Stream.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\tone.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\usb_serial.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_analog.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_digital.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_math.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_shift.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\wirish_time.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\WString.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\stm32f1\wiring_pulse_f1.cpp">
+      <Filter>src\_micro-api-readonly\core\stm32f1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\stm32f1\wirish_debug.cpp">
+      <Filter>src\_micro-api-readonly\core\stm32f1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\stm32f1\wirish_digital_f1.cpp">
+      <Filter>src\_micro-api-readonly\core\stm32f1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\variants\generic_stm32f103c\board.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src\RTClock.cpp">
+      <Filter>src\_micro-api-readonly\libraries\RTClock</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src\utility\rtc_util.c">
+      <Filter>src\_micro-api-readonly\libraries\RTClock</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\RTClock</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -166,6 +166,8 @@ void setup()
 // Add the main program code into the continuous loop() function
 void loop()
 {
+	Serial.println("12355");
+	//delay(1000);
 	//nvic_sys_reset();
 	Sleep();
 }

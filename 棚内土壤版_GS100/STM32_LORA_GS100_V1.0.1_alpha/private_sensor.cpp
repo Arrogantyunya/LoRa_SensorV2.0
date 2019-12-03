@@ -12,7 +12,7 @@ void Sensor::Get_All_Sensor_Data(void)
 {
 	PWR_485_ON;
 
-	delay(100);//¾­¹ý²âÊÔ£¬ÐÂ°æµÄPHµÄ²âÁ¿£¬ÎªÁËÊ¹ÎÂÊª¶ÈÊý¾ÝÍêÕû¶Á³ö£¬ÐèÒªµÈ´ýÎÂÊª¶È´«¸ÐÆ÷³õÊ¼»¯Íê³É¡£ËùÒÔÔö¼Ó100msµÄÑÓÊ±£¬·ñÔò¿ÉÄÜ³öÏÖÎÂ¶ÈÊý¾Ý¶ÁÈ¡²»³öÀ´¡£
+	delay(100);//ç»è¿‡æµ‹è¯•ï¼Œæ–°ç‰ˆçš„PHçš„æµ‹é‡ï¼Œä¸ºäº†ä½¿æ¸©æ¹¿åº¦æ•°æ®å®Œæ•´è¯»å‡ºï¼Œéœ€è¦ç­‰å¾…æ¸©æ¹¿åº¦ä¼ æ„Ÿå™¨åˆå§‹åŒ–å®Œæˆã€‚æ‰€ä»¥å¢žåŠ 100msçš„å»¶æ—¶ï¼Œå¦åˆ™å¯èƒ½å‡ºçŽ°æ¸©åº¦æ•°æ®è¯»å–ä¸å‡ºæ¥ã€‚
 	Sensor_Data.g_Temp = sht10.readTemperatureC();
 	delay(100);
 	Sensor_Data.g_Humi = sht10.readHumidity();
@@ -198,7 +198,7 @@ void Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
 	RS485_Serial.write(Send_Cmd, 8);
 	delay(100);
 
-	while (RS485_Serial.available() > 0)//02 03 02 0033 F851¾ÍÊÇ0x33 = 5.1
+	while (RS485_Serial.available() > 0)//02 03 02 0033 F851å°±æ˜¯0x33 = 5.1
 	{
 		Receive_Data[Length++] = RS485_Serial.read();
 		if (Length >= 8)
