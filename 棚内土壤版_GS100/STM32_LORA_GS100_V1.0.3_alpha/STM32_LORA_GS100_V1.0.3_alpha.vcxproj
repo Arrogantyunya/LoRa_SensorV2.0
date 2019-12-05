@@ -91,7 +91,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\STM32_LORA_GS100_V1.0.3_alpha;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src\utility;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\avr;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\libmaple;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\cores\maple\stm32f1;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\variants\generic_stm32f103c;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\system\libmaple;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\system\libmaple\include;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\system\libmaple\stm32f1\include;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\system\libmaple\usb\stm32f1;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32\STM32F1\system\libmaple\usb\usb_lib;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\stm32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.STM32_LORA_GS100_V1.0.3_alpha.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>_VMDEBUG=1;DEBUG_LEVEL=DEBUG_NONE;BOARD_generic_stm32f103c;VECT_TAB_ADDR=0x8000000;ERROR_LED_PORT=GPIOB;ERROR_LED_PIN=1;F_CPU=72000000L;ARDUINO=108010;ARDUINO_GENERIC_STM32F103C;ARDUINO_ARCH_STM32F1;CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG;MCU_STM32F103C8;__STM32F1__;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG_LEVEL=DEBUG_FAULT;BOARD_generic_stm32f103c;VECT_TAB_ADDR=0x8000000;ERROR_LED_PORT=GPIOB;ERROR_LED_PIN=1;F_CPU=72000000L;ARDUINO=108010;ARDUINO_GENERIC_STM32F103C;ARDUINO_ARCH_STM32F1;CONFIG_MAPLE_MINI_NO_DISABLE_DEBUG;MCU_STM32F103C8;__STM32F1__;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -153,7 +153,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config.Debug.custom_stm32_genericSTM32F103C_upload_method="serialMethod" config.Debug.customdebug_stm32_genericSTM32F103C_debugger_type="none" />
+      <UserProperties config.Debug.custom_stm32_genericSTM32F103C_upload_method="serialMethod" config.Debug.customdebug_stm32_genericSTM32F103C_debugger_type="none" config.Debug.arduino.upload.port="COM12" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

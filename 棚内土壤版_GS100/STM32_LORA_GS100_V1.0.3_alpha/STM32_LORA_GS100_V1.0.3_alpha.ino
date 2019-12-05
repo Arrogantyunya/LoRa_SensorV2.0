@@ -52,7 +52,7 @@ void setup()
 	RS485_Serial.begin(9600);  //ModBus SoftwareSerial baud
 	bkp_init(); //Initialize backup register.
 
-	Serial.println("开始执行初始化");
+	Serial.println("执行初始化");
 	Some_Peripheral.Peripheral_GPIO_Config();
 	LoRa_MHL9LF.LoRa_GPIO_Config();
 	RS485_GPIO_Config();  //RS485 GPIO configuration
