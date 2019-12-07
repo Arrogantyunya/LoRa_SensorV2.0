@@ -24,8 +24,8 @@
 #define SN_ACCESS_NETWORK_FLAG_ADDR         33
 //软件版本和硬件版本保存地址
 //Software version and hardware version save address.
-#define SOFT_HARD_VERSION_BASE_ADDR         34
-#define SOFT_HARD_VERSION_END_ADDR          37
+#define SOFT_VERSION_BASE_ADDR         34
+#define HARD_VERSION_BASE_ADDR         36
 //工作组号
 //work group
 #define GROUP_NUMBER_BASE_ADDR              38
@@ -77,10 +77,12 @@ public:
     void Clear_LoRa_Config_Flag(void);
 };
 
-class Soft_Hard_Vertion : public EEPROM_Operations{
+class Soft_Hard_Vertion : public EEPROM_Operations {
 public:
-    void Save_hardware_version(unsigned char number_high, unsigned char number_low);
-    void Save_Software_version(unsigned char number_high, unsigned char number_low);
+	void Save_hardware_version(unsigned char number_high, unsigned char number_low);
+	void Save_Software_version(unsigned char number_high, unsigned char number_low);
+	unsigned char Read_hardware_version(unsigned char number_addr);
+	unsigned char Read_Software_version(unsigned char number_addr);
 };
 
 class Control_Information : public EEPROM_Operations{

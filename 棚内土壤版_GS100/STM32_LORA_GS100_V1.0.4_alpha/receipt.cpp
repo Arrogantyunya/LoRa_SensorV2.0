@@ -97,10 +97,16 @@ void Receipt::Report_General_Parameter(void)
   Report_Frame[Frame_Length++] = 0x00; 
   //RTC 
   for (unsigned char i = 0; i < 7; i++)
-    Report_Frame[Frame_Length++] = 0x00; 
-  //The reserved 8 bytes.
-  for (unsigned char i = 0; i < 8; i++)  
-    Report_Frame[Frame_Length++] = 0x00;
+	  Report_Frame[Frame_Length++] = 0x00;
+  //Software_versio
+  Report_Frame[Frame_Length++] = Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR);
+  Report_Frame[Frame_Length++] = Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1);
+  //Hardware_version
+  Report_Frame[Frame_Length++] = Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR);
+  Report_Frame[Frame_Length++] = Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR + 1);
+  //The reserved 4 bytes.
+  for (unsigned char i = 0; i < 4; i++)
+	  Report_Frame[Frame_Length++] = 0x00;
   //CRC8
   Report_Frame[Frame_Length++] = GetCrc8(&Report_Frame[4], 0x24);
   //Frame end

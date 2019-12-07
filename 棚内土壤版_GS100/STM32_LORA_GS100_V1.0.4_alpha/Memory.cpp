@@ -366,30 +366,42 @@ void LoRa_Config::Clear_LoRa_Config_Flag(void)
 
 /*
  @brief     : 保存该设备的软件版本号
-              Save device's software version.
+			  Save device's software version.
  @para      : Version number high byte, version number low byte.
  @return    : None
  */
 void Soft_Hard_Vertion::Save_Software_version(unsigned char number_high, unsigned char number_low)
 {
-    EEPROM_Write_Enable();
-    AT24CXX_WriteOneByte(SOFT_HARD_VERSION_BASE_ADDR, number_high);
-    AT24CXX_WriteOneByte(SOFT_HARD_VERSION_BASE_ADDR + 1,  number_low);
-    EEPROM_Write_Disable();
+	EEPROM_Write_Enable();
+	AT24CXX_WriteOneByte(SOFT_VERSION_BASE_ADDR, number_high);
+	AT24CXX_WriteOneByte(SOFT_VERSION_BASE_ADDR + 1, number_low);
+	EEPROM_Write_Disable();
+}
+
+unsigned char Soft_Hard_Vertion::Read_hardware_version(unsigned char number_addr)
+{
+	unsigned char version = AT24CXX_ReadOneByte(number_addr);
+	return version;
+}
+
+unsigned char Soft_Hard_Vertion::Read_Software_version(unsigned char number_addr)
+{
+	unsigned char version = AT24CXX_ReadOneByte(number_addr);
+	return version;
 }
 
 /*
  @brief     : 保存该设备的硬件版本号
-              Save device's hardware version.
+			  Save device's hardware version.
  @para      : Version number high byte, version number low byte.
  @return    : None
  */
 void Soft_Hard_Vertion::Save_hardware_version(unsigned char number_high, unsigned char number_low)
 {
-    EEPROM_Write_Enable();
-    AT24CXX_WriteOneByte(SOFT_HARD_VERSION_BASE_ADDR + 2, number_high);
-    AT24CXX_WriteOneByte(SOFT_HARD_VERSION_END_ADDR, number_low);
-    EEPROM_Write_Disable();
+	EEPROM_Write_Enable();
+	AT24CXX_WriteOneByte(HARD_VERSION_BASE_ADDR, number_high);
+	AT24CXX_WriteOneByte(HARD_VERSION_BASE_ADDR + 1, number_low);
+	EEPROM_Write_Disable();
 }
 
 /*

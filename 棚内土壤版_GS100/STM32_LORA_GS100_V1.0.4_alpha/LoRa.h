@@ -35,8 +35,8 @@
 #define AT_INQUIRE_PARA(at)         at"\r\n"   
 
 //Set command
-#define AT_NET                      "AT+NET="
 #define AT_AK                       "AT+AK="
+#define AT_NET                      "AT+NET="
 #define AT_ADDR                     "AT+ADDR="    
 #define AT_MADDR                    "AT+MADDR="
 #define AT_MODE                     "AT+MODE="

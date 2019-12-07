@@ -166,13 +166,13 @@ void date::Set_Alarm(void)
 		}
 		else if (LowBalFlag == 2)
 		{
-			alarm += 18;  //如果电压过低，强制休眠20分钟
-			Serial.println(String("没有收到服务器的参数设置！！电池电压极低！！！自动修订的间隔休眠时间为：Time_temp = 18s"));
+			alarm += 2400;  //如果电压极低，强制休眠40分钟
+			Serial.println(String("没有收到服务器的参数设置！！电池电压极低！！！自动修订的间隔休眠时间为：Time_temp = 2400s"));
 		}
 		else
 		{
-			alarm += 18;
-			Serial.println(String("没有收到服务器的参数设置！！电池电压正常，自动修订的间隔休眠时间为：Time_temp = 18s"));
+			alarm += 180;
+			Serial.println(String("没有收到服务器的参数设置！！电池电压正常，自动修订的间隔休眠时间为：Time_temp = 180s"));
 		}
 	}
 

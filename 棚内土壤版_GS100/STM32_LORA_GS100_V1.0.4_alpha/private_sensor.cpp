@@ -10,7 +10,7 @@ Sensor private_sensor;
 
 void Sensor::Get_All_Sensor_Data(void)
 {
-    //PWR_485_ON;
+    PWR_485_ON;
 
 	delay(100);
     Sensor_Data.g_Temp = sht10.readTemperatureC();
@@ -24,7 +24,7 @@ void Sensor::Get_All_Sensor_Data(void)
     private_sensor.Read_Lux_and_UV(&Sensor_Data.g_Lux, &Sensor_Data.g_UV);
     delay(100);
 
-    //PWR_485_OFF;
+    PWR_485_OFF;
 
     Serial.print("temperature: ");
     Serial.println(Sensor_Data.g_Temp);

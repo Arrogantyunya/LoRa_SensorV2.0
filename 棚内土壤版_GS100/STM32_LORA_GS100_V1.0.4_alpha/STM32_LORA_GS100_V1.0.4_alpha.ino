@@ -1,4 +1,13 @@
+// Visual Micro is in vMicro>General>Tutorial Mode
+// 
+/*
+	Name:       STM32_LORA_GS100_V1.0.0_alpha.ino
+	Created:	2019/12/7 星期六 09:23:08
+	Author:     刘家辉
+*/
 
+// Define User Types below here or use a .h file
+//
 #include <Arduino.h>
 #include <libmaple/pwr.h>
 #include <libmaple/bkp.h>
@@ -12,18 +21,34 @@
 #include "private_sensor.h"
 #include "receipt.h"
 
+
+// Define Function Prototypes that use User Types below here or use a .h file
+//
+#define test_time 2000 
+#define SOFT_HARD_VERSION 1
+#define Software_version_high	0x01
+#define Software_version_low	0x04
+#define Hardware_version_high	0x07
+#define Hardware_version_low	0x00
+
+// Define Functions below here or use other .ino or cpp files
+//
+
+
 void Request_Access_Network(void);
 void Data_Communication_with_Gateway(void);
 void Sleep(void);
 void Key_Reset_LoRa_Parameter(void);
 
-unsigned char g_SN_Code[9] = { 0x00 }; //Defualt SN code is 0.
+unsigned char g_SN_Code[9] = { 0x00 }; //
+
 
 /*----------Function statement----------*/
+//void Sleep(void);
 
-/*--------------------------------------*/
 
-/****************Set Up*******************/
+// The setup() function runs once each time the micro-controller starts
+
 void setup()
 {
 	afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
@@ -49,9 +74,31 @@ void setup()
 	delay(10);
 
 #if SOFT_HARD_VERSION
-	Vertion.Save_Software_version(0x00, 0x01);
-	Vertion.Save_hardware_version(0x00, 0x01);
+	Serial.println("");
+	//软件版本存储程序
+	if (Software_version_high == Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR) &&
+		Software_version_low == Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1))
+	{
+		Serial.println(String("当前的软件版本为V") + String(Software_version_high,HEX) + "." + String(Software_version_low,HEX));
+	}
+	else
+	{
+		Vertion.Save_Software_version(Software_version_high, Software_version_low);
+		Serial.println(String("成功存储软件版本，当前的软件版本为V") + String(Software_version_high,HEX) + "." + String(Software_version_low,HEX));
+	}
+	//硬件版本存储程序
+	if (Hardware_version_high == Vertion.Read_hardware_version(HARD_VERSION_BASE_ADDR) &&
+		Hardware_version_low == Vertion.Read_hardware_version(HARD_VERSION_BASE_ADDR + 1))
+	{
+		Serial.println(String("当前的硬件版本为V") + Hardware_version_high + "." + Hardware_version_low);
+	}
+	else
+	{
+		Vertion.Save_hardware_version(Hardware_version_high, Hardware_version_low);
+		Serial.println(String("成功存储硬件版本，当前的硬件版本为V") + Hardware_version_high + "." + Hardware_version_low);
+	}
 #endif
+
 
 	Key_Reset_LoRa_Parameter();//先按按键1，在按按键2
 
@@ -82,7 +129,7 @@ void setup()
 
 
 	//-----极低电压不发送数据
-	/*if (Some_Peripheral.Get_Voltage() <= 2800)
+	if (Some_Peripheral.Get_Voltage() <= 2800)
 	{
 		delay(100);
 		if (Some_Peripheral.Get_Voltage() <= 2800)
@@ -91,7 +138,7 @@ void setup()
 
 			Sleep();
 		}
-	}*/
+	}
 	//-----极低电压不发送数据
 
 
@@ -118,11 +165,6 @@ void setup()
 void loop()
 {
 	Sleep();
-	//USB_ON; //Turn on the USB enable
-	//delay(10);
-	//setup();
-	//Serial.println("ddddddd");
-	//delay(1000);
 }
 
 /*
@@ -189,9 +231,9 @@ void Data_Communication_with_Gateway(void)
 
 		wait_time = millis();
 
-	} while (Get_Para_num < 1);
+	} while (Get_Para_num < 3);
 
-	if (Get_Para_num == 1) //If it don't receive message three times.
+	if (Get_Para_num == 3) //If it don't receive message three times.
 		Serial.println("No parameter were received !!!");
 }
 
