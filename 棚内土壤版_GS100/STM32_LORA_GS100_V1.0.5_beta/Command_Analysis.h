@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 
+#define Only_net				1
+#define All_parameter			0
+
 
 enum Frame_ID{
   Work_Para, Set_Group_Num, SN_Area_Channel, Work_Status, Work_Limit

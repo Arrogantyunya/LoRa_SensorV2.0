@@ -11,17 +11,16 @@
 /*EEPROM*/
 #define EEPROM_MIN_ADDR                     0
 #define EEPROM_MAX_ADDR                     255 
-//SN码保存地址
-//SN code save address
-#define SN_OPERATION_FLAG_ADDR              11
-#define SN_BKP_OPERATION_FLAG_ADDR          12
-#define SN_BASE_ADDR                        13
-#define SN_END_ADDR                         21
-#define SN_VERIFY_ADDR                      22
-#define SN_BKP_BASE_ADDR                    23
-#define SN_BKP_END_ADDR                     31
-#define SN_BKP_VERIFY_ADDR                  32
-#define SN_ACCESS_NETWORK_FLAG_ADDR         33
+/*SN码相关操作保存地址*/
+#define SN_OPERATION_FLAG_ADDR                  11
+#define SN_BKP_OPERATION_FLAG_ADDR              12
+#define SN_BASE_ADDR                            13
+#define SN_END_ADDR                             21
+#define SN_VERIFY_ADDR                          22
+#define SN_BKP_BASE_ADDR                        23
+#define SN_BKP_END_ADDR                         31
+#define SN_BKP_VERIFY_ADDR                      32
+#define SN_ACCESS_NETWORK_FLAG_ADDR             33
 //软件版本和硬件版本保存地址
 //Software version and hardware version save address.
 #define SOFT_VERSION_BASE_ADDR         34
@@ -44,12 +43,15 @@
 
 #define LORA_PARA_CONFIG_FLAG_ADDR          53
 
-//LORA地址
-#define EP_LORA_ADDR_BASE_ADDR				54
-#define EP_LORA_ADDR_VERIFY_ADDR			63
-#define EP_LORA_ADDR_SAVED_FLAG_ADDR		64
-#define LORA_COM_MODE_ADDR					65
-#define LORA_COM_MODE_VERIFY_ADDR			66
+/* LoRa通信模式配置成网关还是节点 0xF0节点; 0xF1网关 */
+#define LORA_COM_MODE_ADDR                      76
+#define LORA_COM_MODE_FLAG_ADDR                 77
+#define LORA_COM_MODE_VERIFY_ADDR               78
+
+#define EP_LORA_ADDR_BASE_ADDR                  79
+#define EP_LORA_ADDR_END_ADDR                   86
+#define EP_LORA_ADDR_VERIFY_ADDR                87
+#define EP_LORA_ADDR_SAVED_FLAG_ADDR            88
 
 class EEPROM_Operations : protected AT24Cxx{
 public:
@@ -76,11 +78,16 @@ public:
     bool Self_Check(unsigned char *dat);
 };
 
-class LoRa_Config : public EEPROM_Operations{
+class LoRa_Config : public EEPROM_Operations {
 public:
-    void Save_LoRa_Config_Flag(void);
-    bool Verify_LoRa_Config_Flag(void);
-    void Clear_LoRa_Config_Flag(void);
+	bool Save_LoRa_Config_Flag(void);
+	bool Verify_LoRa_Config_Flag(void);
+	bool Clear_LoRa_Config_Flag(void);
+
+	bool Save_LoRa_Com_Mode_Flag(void);
+	bool Clear_LoRa_Com_Mode_Flag(void);
+	bool Save_LoRa_Com_Mode(unsigned char mode);
+	unsigned char Read_LoRa_Com_Mode(void);
 
 	void Clear_LoRa_Addr_Flag(void);
 	void Save_LoRa_Addr_Flag(void);

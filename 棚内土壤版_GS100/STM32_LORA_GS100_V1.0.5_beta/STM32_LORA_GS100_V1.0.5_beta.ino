@@ -30,8 +30,8 @@
 #define Software_version_low	0x05
 #define Hardware_version_high	0x07
 #define Hardware_version_low	0x00
-#define only_net				1
-#define All_parameter			0
+//#define Only_net				1
+//#define All_parameter			0
 
 // Define Functions below here or use other .ino or cpp files
 //
@@ -57,7 +57,6 @@ void setup()
 
 
 	Some_Peripheral.Peripheral_GPIO_Config();
-	GREEN_ON;
 
 	Serial.begin(9600);         //DEBUG Serial baud
 	LoRa_MHL9LF.BaudRate(9600);    //LoRa SoftwareSerial baud
@@ -70,7 +69,7 @@ void setup()
 	EEPROM_Operation.EEPROM_GPIO_Config();
 	LoRa_MHL9LF.Mode(PASS_THROUGH_MODE);
 	delay(1000);
-	LoRa_Command_Analysis.Receive_LoRa_Cmd();
+	LoRa_Command_Analysis.Receive_LoRa_Cmd();//接收LORA收到的数据
 
 	USB_ON; //Turn on the USB enable
 	delay(10);
@@ -102,7 +101,7 @@ void setup()
 #endif
 
 
-	Key_Reset_LoRa_Parameter();//先按按键1，在按按键2
+	Key_Reset_LoRa_Parameter();//按键2重置LORA参数
 
 	//Initialize LoRa parameter.
 	if (LoRa_Para_Config.Verify_LoRa_Config_Flag() == false)
@@ -144,7 +143,6 @@ void setup()
 	//-----极低电压不发送数据
 
 
-
 	Data_Communication_with_Gateway();//发送数据至网关
 
 
@@ -162,12 +160,12 @@ void setup()
 		}
 	}
 
-	Private_RTC.Set_Alarm();
+	Private_RTC.Set_Alarm();//设置RTC闹钟
 }
 
 void loop()
 {
-	Sleep();
+	Sleep();//进入停机模式
 }
 
 /*
@@ -262,9 +260,9 @@ void Sleep(void)
 
 void Key_Reset_LoRa_Parameter(void)
 {
-	if (digitalRead(K1) == LOW) {
+	if (digitalRead(K2) == LOW) {
 		delay(100);
-		if (digitalRead(K1) == LOW) {
+		if (digitalRead(K2) == LOW) {
 			//Some_Peripheral.Key_Buzz(600);
 			delay(2500);
 			Serial.println("K1释放，K2按下");

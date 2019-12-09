@@ -50,5 +50,21 @@ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\
  C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\cores\maple/tone.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\cores\maple/Arduino.h \
  C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\variants\generic_stm32f103c/variant.h \
- d:\vs2019\common7\ide\extensions\y4ur5orx.hne\Micro\ Platforms\default\debuggers\VM_DBG/VM_DBG.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\cores\maple/Arduino.h
+ C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\cores\maple/Arduino.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\system/libmaple/include/libmaple/pwr.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\system/libmaple/stm32f1/include/series/pwr.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\system/libmaple/include/libmaple/bkp.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src/RTClock.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\stm32\STM32F1\libraries\RTClock\src/utility/rtc_util.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\RS485.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\LoRa.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\Memory.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\AT24CXX.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\private_i2c.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\Command_Analysis.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\fun_periph.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\Private_RTC.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\User_Clock.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\private_sensor.h \
+ C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release\receipt.h \
+ d:\vs2019\common7\ide\extensions\y4ur5orx.hne\Micro\ Platforms\default\debuggers\VM_DBG/VM_DBG.h

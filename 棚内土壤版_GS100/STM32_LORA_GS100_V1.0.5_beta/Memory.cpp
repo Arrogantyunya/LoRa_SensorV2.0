@@ -439,14 +439,6 @@ bool LoRa_Config::Save_LoRa_Com_Mode(unsigned char mode)
 {
 	unsigned char ModeCrc8;
 
-
-
-
-
-
-
-
-
 	if (mode == 0xF0 || mode == 0xF1)
 	{
 		if (AT24CXX_ReadOneByte(LORA_COM_MODE_ADDR) == mode)

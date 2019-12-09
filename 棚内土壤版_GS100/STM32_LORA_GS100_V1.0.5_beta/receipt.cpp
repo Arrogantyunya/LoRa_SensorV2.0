@@ -368,7 +368,7 @@ void Receipt::Send_Sensor_Data(void)
   unsigned char Receipt_Length = 0;
   bool Temperature_Change_Flag = false;
   float SoliTemp_Value = 0.0;
-  unsigned char Random_Seed;
+  //unsigned char Random_Seed;
   unsigned long int Random_Send_Interval = 0;
     
   Receipt_Random_Wait_Value(&Random_Send_Interval);

@@ -287,13 +287,28 @@ void Command_Analysis::Query_Current_Work_Para(void)
 	}
 	else if (g_Receive_cmd[8] == 0X01)
 	{
-		if (g_Receive_cmd[18] == 0XF1)
+		if (g_Receive_cmd[18] == 0XF1)//0xF0节点，0xF1网关
 		{
-			LoRa_MHL9LF.Parameter_Init(All_parameter);//设置所有的参数
+			//if (LoRa_Para_Config.Read_LoRa_Com_Mode() == 0xF1)
+			if (LoRa_Para_Config.Save_LoRa_Com_Mode(0xF1) == true)
+			{
+				LoRa_MHL9LF.Parameter_Init(Only_net);//设置所有的参数
+			}
+			else
+			{
+				Serial.println("配置节点模式保存失败");
+			}
 		}
 		else
 		{
-
+			if (LoRa_Para_Config.Save_LoRa_Com_Mode(0xF0) == true)
+			{
+				LoRa_MHL9LF.Parameter_Init(Only_net);//设置所有的参数
+			}
+			else
+			{
+				Serial.println("配置节点模式保存失败");
+			}
 		}
 	}
 	else
