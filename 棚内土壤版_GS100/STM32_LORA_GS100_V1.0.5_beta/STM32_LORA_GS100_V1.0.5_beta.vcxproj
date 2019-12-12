@@ -222,7 +222,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config.Release.custom_stm32_genericSTM32F103C_upload_method="serialMethod" config.Release.arduino.upload.port="COM10" config.Release.customdebug_stm32_genericSTM32F103C_debugger_type="universal" config.Release.custom_stm32_genericSTM32F103C_device_variant="STM32F103C8" config.Debug.arduino.upload.port="COM10" />
+      <UserProperties config.Release.custom_stm32_genericSTM32F103C_upload_method="serialMethod" config.Release.arduino.upload.port="COM12" config.Release.customdebug_stm32_genericSTM32F103C_debugger_type="universal" config.Release.custom_stm32_genericSTM32F103C_device_variant="STM32F103C8" config.Debug.arduino.upload.port="COM10" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

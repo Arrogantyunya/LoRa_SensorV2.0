@@ -2842,113 +2842,113 @@ END GROUP
 .igot.plt       0x20001378        0x0 load address 0x0800d780
  .igot.plt      0x00000000        0x0 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
 
-.rodata         0x0800d780     0x13c0
+.rodata         0x0800d780     0x13d0
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata.str1.1
-                0x0800d780      0x1b7 STM32_LORA_GS100_V1.0.5_beta.cpp.o
-                                0x1ee (size before relaxing)
+                0x0800d780      0x1c3 STM32_LORA_GS100_V1.0.5_beta.cpp.o
+                                0x1fa (size before relaxing)
  .rodata._ZL10ascii2bcd1
-                0x0800d937        0xa BCD_CON.cpp.o
+                0x0800d943        0xa BCD_CON.cpp.o
  .rodata._ZL10ascii2bcd2
-                0x0800d941        0x6 BCD_CON.cpp.o
+                0x0800d94d        0x6 BCD_CON.cpp.o
  .rodata.str1.1
-                0x0800d947      0x24c Command_Analysis.cpp.o
+                0x0800d953      0x24c Command_Analysis.cpp.o
                                 0x24e (size before relaxing)
  .rodata.str1.1
-                0x0800db93      0x2d8 LoRa.cpp.o
+                0x0800db9f      0x2d8 LoRa.cpp.o
                                 0x2dd (size before relaxing)
  .rodata.str1.1
-                0x0800de6b      0x131 Memory.cpp.o
+                0x0800de77      0x131 Memory.cpp.o
  .rodata.str1.1
-                0x0800df9c      0x40b Private_RTC.cpp.o
+                0x0800dfa8      0x40b Private_RTC.cpp.o
                                 0x40f (size before relaxing)
- *fill*         0x0800e3a7        0x1 
+ *fill*         0x0800e3b3        0x5 
  .rodata._ZTV8MAX44009
-                0x0800e3a8       0x20 private_sensor.cpp.o
-                0x0800e3a8                vtable for MAX44009
- .rodata        0x0800e3c8       0x10 private_sensor.cpp.o
+                0x0800e3b8       0x20 private_sensor.cpp.o
+                0x0800e3b8                vtable for MAX44009
+ .rodata        0x0800e3d8       0x10 private_sensor.cpp.o
  .rodata.str1.1
-                0x0800e3d8       0x93 private_sensor.cpp.o
+                0x0800e3e8       0x93 private_sensor.cpp.o
                                  0xac (size before relaxing)
  .rodata.str1.1
-                0x0800e46b       0xa0 receipt.cpp.o
+                0x0800e47b       0xa0 receipt.cpp.o
                                  0xa2 (size before relaxing)
  .rodata.str1.1
-                0x0800e50b       0x68 VM_DBG\VM_DBG.cpp.o
+                0x0800e51b       0x68 VM_DBG\VM_DBG.cpp.o
                                  0x6a (size before relaxing)
- *fill*         0x0800e573        0x1 
+ *fill*         0x0800e583        0x1 
  .rodata.PIN_MAP
-                0x0800e574      0x230 C:\Users\Administrator\AppData\Local\Temp\VMBCore\arduino16x\a216b031ebfaa7ee306e78031a96e601\variant\board.cpp.o
-                0x0800e574                PIN_MAP
- .rodata.GPIOB  0x0800e7a4        0x4 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(gpio_f1.c.o)
-                0x0800e7a4                GPIOB
+                0x0800e584      0x230 C:\Users\Administrator\AppData\Local\Temp\VMBCore\arduino16x\a216b031ebfaa7ee306e78031a96e601\variant\board.cpp.o
+                0x0800e584                PIN_MAP
+ .rodata.GPIOB  0x0800e7b4        0x4 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(gpio_f1.c.o)
+                0x0800e7b4                GPIOB
  .rodata.str1.1
-                0x0800e7a8       0x70 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(rcc_f1.c.o)
+                0x0800e7b8       0x70 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(rcc_f1.c.o)
  .rodata.rcc_dev_table
-                0x0800e818       0x5c C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(rcc_f1.c.o)
-                0x0800e818                rcc_dev_table
+                0x0800e828       0x5c C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(rcc_f1.c.o)
+                0x0800e828                rcc_dev_table
  .rodata.masks.4420
-                0x0800e874       0x14 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(rcc_f1.c.o)
+                0x0800e884       0x14 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(rcc_f1.c.o)
  .rodata.str1.1
-                0x0800e888       0x6f C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(timer.c.o)
+                0x0800e898       0x6f C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(timer.c.o)
                                  0x71 (size before relaxing)
  .rodata.str1.1
-                0x0800e8f7       0x3f C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(util.c.o)
+                0x0800e907       0x3f C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(util.c.o)
                                  0x42 (size before relaxing)
- *fill*         0x0800e936        0x2 
+ *fill*         0x0800e946        0x2 
  .rodata._ZTV14HardwareSerial
-                0x0800e938       0x28 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(HardwareSerial.cpp.o)
-                0x0800e938                vtable for HardwareSerial
+                0x0800e948       0x28 C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(HardwareSerial.cpp.o)
+                0x0800e948                vtable for HardwareSerial
  .rodata.str1.1
-                0x0800e960        0xf C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(Print.cpp.o)
+                0x0800e970        0xf C:\Users\Administrator\AppData\Local\Temp\VMBuilds\STM32_LORA_GS100_V1.0.5_beta\stm32_genericSTM32F103C\Release/core.a(Print.cpp.o)
                                  0x11 (size before relaxing)
- *fill*         0x0800e96f        0x1 
+ *fill*         0x0800e97f        0x1 
  .rodata.str1.4
-                0x0800e970        0x4 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-w_pow.o)
- *fill*         0x0800e974        0x4 
- .rodata.dp_h   0x0800e978       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
- .rodata.dp_l   0x0800e988       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
- .rodata.bp     0x0800e998       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
+                0x0800e980        0x4 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-w_pow.o)
+ *fill*         0x0800e984        0x4 
+ .rodata.dp_h   0x0800e988       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
+ .rodata.dp_l   0x0800e998       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
+ .rodata.bp     0x0800e9a8       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
  .rodata.str1.4
                 0x00000000        0x4 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_pow.o)
- .rodata.TWO52  0x0800e9a8       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_rint.o)
+ .rodata.TWO52  0x0800e9b8       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_rint.o)
  .rodata.str1.4
-                0x0800e9b8        0x2 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-impure.o)
+                0x0800e9c8        0x2 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-impure.o)
                                   0x4 (size before relaxing)
- *fill*         0x0800e9ba        0x2 
+ *fill*         0x0800e9ca        0x2 
  .rodata._global_impure_ptr
-                0x0800e9bc        0x4 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-impure.o)
-                0x0800e9bc                _global_impure_ptr
+                0x0800e9cc        0x4 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-impure.o)
+                0x0800e9cc                _global_impure_ptr
  .rodata.zeroes.6760
-                0x0800e9c0       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-svfprintf.o)
+                0x0800e9d0       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-svfprintf.o)
  .rodata.str1.4
-                0x0800e9d0       0x42 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-svfprintf.o)
+                0x0800e9e0       0x42 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-svfprintf.o)
                                  0x44 (size before relaxing)
- *fill*         0x0800ea12        0x2 
+ *fill*         0x0800ea22        0x2 
  .rodata.blanks.6759
-                0x0800ea14       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-svfprintf.o)
+                0x0800ea24       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-svfprintf.o)
  .rodata.str1.4
-                0x0800ea24       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-dtoa.o)
+                0x0800ea34       0x10 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-dtoa.o)
                                  0x14 (size before relaxing)
  .rodata.str1.4
-                0x0800ea34        0xc c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-locale.o)
+                0x0800ea44        0xc c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-locale.o)
                                  0x14 (size before relaxing)
  .rodata.__mprec_tens
-                0x0800ea40       0xc8 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-mprec.o)
-                0x0800ea40                __mprec_tens
+                0x0800ea50       0xc8 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-mprec.o)
+                0x0800ea50                __mprec_tens
  .rodata.__mprec_bigtens
-                0x0800eb08       0x28 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-mprec.o)
-                0x0800eb08                __mprec_bigtens
+                0x0800eb18       0x28 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-mprec.o)
+                0x0800eb18                __mprec_bigtens
  .rodata.p05.5266
-                0x0800eb30        0xc c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-mprec.o)
+                0x0800eb40        0xc c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libc.a(lib_a-mprec.o)
  *(.USER_FLASH)
-                0x0800eb3c                . = ALIGN (0x4)
-                0x0800eb3c                _lm_rom_img_cfgp = .
-                0x0800eb3c        0x4 LONG 0x800c408 LOADADDR (.data)
+                0x0800eb4c                . = ALIGN (0x4)
+                0x0800eb4c                _lm_rom_img_cfgp = .
+                0x0800eb4c        0x4 LONG 0x800c408 LOADADDR (.data)
                 0x200015d8                _lm_heap_start = DEFINED (_lm_heap_start)?_lm_heap_start:_end
                 0x20005000                _lm_heap_end = DEFINED (_lm_heap_end)?_lm_heap_end:__msp_init
 
-.rel.dyn        0x0800eb40        0x0
+.rel.dyn        0x0800eb50        0x0
  .rel.iplt      0x00000000        0x0 c:/users/administrator/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
 
 .bss            0x20001378      0x260

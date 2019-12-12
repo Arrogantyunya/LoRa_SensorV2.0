@@ -246,7 +246,7 @@ void Data_Communication_with_Gateway(void)
 void Sleep(void)
 {
 	Serial.println("Enter Sleep>>>>>>");
-	Serial.println("睡觉");
+	Serial.println("进入停机模式");
 	Serial.flush();
 	Some_Peripheral.Stop_LED();
 	PWR_485_OFF;
