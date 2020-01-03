@@ -392,7 +392,7 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = highByte(BatVol);
   Sensor_Buffer[Receipt_Length++] = lowByte(BatVol);
 
-  //Air Temperature
+  //Air Temperature空气温度
   NumOfDot = 2;
   if (Sensor_Data.g_Temp > 150){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -415,7 +415,7 @@ void Receipt::Send_Sensor_Data(void)
   else if (Temperature_Change_Flag == false)
     Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;//最高位是0，表示正的数值//10
 
-  //Air Humidity
+  //Air Humidity空气湿度
   memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   NumOfDot = 2;
   if ((int)Sensor_Data.g_Humi > 100 || (int)Sensor_Data.g_Humi <= 0){
@@ -451,14 +451,40 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //Air Pressure
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xE1;
+  //-------------------------------------------------------
+	//Air Pressure气压
+	NumOfDot = 0;
+	memset(Data_BCD, 0x00, sizeof(Data_BCD));
+	PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_PH /10, 4, NumOfDot);
 
-  //UV
+
+	Sensor_Buffer[Receipt_Length++] = 0x00;
+	Sensor_Buffer[Receipt_Length++] = 0x00;
+	Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+	Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+	Sensor_Buffer[Receipt_Length++] = 0xE1 | NumOfDot;
+
+	////Solid Cond土壤电导率（土壤EC）
+	//NumOfDot = 0;
+	//memset(Data_BCD, 0x00, sizeof(Data_BCD));
+
+	//if (Sensor_Data.g_Cond >= 65535)
+	//{
+	//	Sensor_Buffer[Receipt_Length++] = 0xFF;
+	//	Sensor_Buffer[Receipt_Length++] = 0xFF;
+
+	//}
+	//else 
+	//{
+	//	PackBCD((char *)Data_BCD, Sensor_Data.g_Cond, 4, NumOfDot);
+
+	//	Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+	//	Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+	//}
+	//Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
+	//---------------------------------------------------------
+
+  //UV紫外线
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));
 
@@ -478,12 +504,12 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = 0xFF;
   Sensor_Buffer[Receipt_Length++] = 0xE0;
 
-  //TVOC
+  //TVOC总挥发性有机化合物(Total Volatile Organic Compounds)
   Sensor_Buffer[Receipt_Length++] = 0xFF;
   Sensor_Buffer[Receipt_Length++] = 0xFF;
   Sensor_Buffer[Receipt_Length++] = 0xE0;
 
-  //Solid temperature
+  //Solid temperature土壤温度
   NumOfDot = 2;
   if (Sensor_Data.g_Solid_Temp >= 65535){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -530,7 +556,7 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //Solid Cond
+  //Solid Cond土壤电导率（土壤EC）
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));
 
@@ -546,7 +572,7 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //Solid Salt
+  //Solid Salt土壤盐度
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));
 

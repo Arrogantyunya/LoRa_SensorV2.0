@@ -12,12 +12,14 @@ void Sensor::Get_All_Sensor_Data(void)
 {
 	PWR_485_ON;
 
-	delay(100);
+	delay(100);//经过测试，新版的PH的测量，为了使温湿度数据完整读出，需要等待温湿度传感器初始化完成。所以增加100ms的延时，否则可能出现温度数据读取不出来。
 	Sensor_Data.g_Temp = sht10.readTemperatureC();
 	delay(100);
 	Sensor_Data.g_Humi = sht10.readHumidity();
 	delay(100);
 	private_sensor.Read_Solid_Humi_and_Temp(&Sensor_Data.g_Solid_Humi, &Sensor_Data.g_Solid_Temp, &Sensor_Data.g_Solid_Temp_Flag, 0x01);
+	delay(100);
+	private_sensor.Read_Soild_PH(&Sensor_Data.g_Solid_PH, 0x02);
 	delay(100);
 	private_sensor.Read_Salt_and_Cond(&Sensor_Data.g_Salt, &Sensor_Data.g_Cond, 0x01);
 	delay(100);
@@ -32,6 +34,8 @@ void Sensor::Get_All_Sensor_Data(void)
 	Serial.println(Sensor_Data.g_Humi);
 	Serial.print("Solid temperature: ");
 	Serial.println(Sensor_Data.g_Solid_Temp / 100);
+	Serial.print("Solid PH: ");
+	Serial.println(float(Sensor_Data.g_Solid_PH)/100);
 	Serial.print("Solid humility: ");
 	Serial.println(Sensor_Data.g_Solid_Humi);
 	Serial.print("Solid salt: ");
@@ -182,6 +186,77 @@ void Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
 	*humi = hum;
 	*temp = tem_temp;
 	*temp_flag = temperature_flag;
+}
+
+/*
+ *brief   : According to the ID address and register(ModBus) address of the soil sensor, read PH
+ *para    : Solid_PH, address
+ *return  : None
+ */
+void Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
+{
+#if ST_500_Soil_PH
+	unsigned char Send_Cmd[8] = { 0x02, 0x03, 0x00, 0x08, 0x00, 0x01,0x00,0x00 };//02 03 0008 0001 05C8
+#elif JXBS_3001_PH
+	unsigned char Send_Cmd[8] = { 0x02, 0x03, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x00 };
+#endif
+	unsigned char Receive_Data[9] = { 0 };
+	unsigned char Length = 0;
+	unsigned int Send_CRC16 = 0, Receive_CRC16 = 0, Verify_CRC16 = 0;
+	unsigned int ph_temp = 0xFFFF;
+
+	Send_Cmd[0] = addr; //Get sensor address
+
+	Send_CRC16 = N_CRC16(Send_Cmd, 6);
+	Send_Cmd[6] = Send_CRC16 >> 8;
+	Send_Cmd[7] = Send_CRC16 & 0xFF;
+
+	RS485_Serial.write(Send_Cmd, 8);
+	delay(100);
+
+	while (RS485_Serial.available() > 0)///02 03 02 0033 F851就是0x33 = 5.1
+	{
+		if (Length >= 8)
+		{
+			Serial.println("土壤酸碱度回执Length >= 8");
+			Length = 0;
+			break;
+		}
+		Receive_Data[Length++] = RS485_Serial.read();
+	}
+
+	//Serial.println(String("土壤酸碱度回执Length = ") + Length);
+
+	Serial.println("---土壤酸碱度回执---");
+	if (Length > 0)
+	{
+		for (size_t i = 0; i < Length; i++)
+		{
+			Serial.print(Receive_Data[i], HEX);
+			Serial.print(" ");
+		}
+	}
+	Serial.println("");
+	Serial.println("---土壤酸碱度回执---");
+
+	Verify_CRC16 = N_CRC16(Receive_Data, 5);
+	Receive_CRC16 = Receive_Data[5] << 8 | Receive_Data[6];
+
+	if (Receive_CRC16 == Verify_CRC16) {
+		//Serial.println("SUCCESS");
+		//delay(3000);
+		ph_temp = Receive_Data[3] << 8 | Receive_Data[4];
+	}
+	else
+	{
+		//Serial.println("ERROR");
+		//delay(3000);
+	}
+#if ST_500_Soil_PH
+	*Solid_PH = ph_temp * 10;
+#elif JXBS_3001_PH
+	*Solid_PH = ph_temp * 10;
+#endif
 }
 
 /*
