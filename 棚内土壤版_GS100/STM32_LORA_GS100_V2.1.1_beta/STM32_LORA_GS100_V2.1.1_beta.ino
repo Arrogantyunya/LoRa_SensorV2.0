@@ -1,8 +1,8 @@
 // Visual Micro is in vMicro>General>Tutorial Mode
 // 
 /*
-    Name:       STM32_LORA_GS100_V2.0.1_beta.ino
-    Created:	2020/01/02 星期四 09:17:34
+    Name:       STM32_LORA_GS100_V2.1.1_beta.ino
+    Created:	2020/01/08 星期三 10:23:05
     Author:     刘家辉
 */
 
@@ -27,9 +27,9 @@
 #define test_time 2000 
 #define SOFT_HARD_VERSION 1
 #define Software_version_high	0x02
-#define Software_version_low	0x01
+#define Software_version_low	0x11
 #define Hardware_version_high	0x07
-#define Hardware_version_low	0x00
+#define Hardware_version_low	0x10
 
 // Define Functions below here or use other .ino or cpp files
 //
@@ -79,23 +79,23 @@ void setup()
 	if (Software_version_high == Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR) &&
 		Software_version_low == Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1))
 	{
-		Serial.println(String("当前的软件版本为V") + String(Software_version_high, HEX) + "." + String(Software_version_low, HEX));
+		Serial.println(String("Software_version is V") + String(Software_version_high, HEX) + "." + String(Software_version_low, HEX));
 	}
 	else
 	{
 		Vertion.Save_Software_version(Software_version_high, Software_version_low);
-		Serial.println(String("成功存储软件版本，当前的软件版本为V") + String(Software_version_high, HEX) + "." + String(Software_version_low, HEX));
+		Serial.println(String("Successfully store the software version, the current software version is V") + String(Software_version_high, HEX) + "." + String(Software_version_low, HEX));
 	}
 	//硬件版本存储程序
 	if (Hardware_version_high == Vertion.Read_hardware_version(HARD_VERSION_BASE_ADDR) &&
 		Hardware_version_low == Vertion.Read_hardware_version(HARD_VERSION_BASE_ADDR + 1))
 	{
-		Serial.println(String("当前的硬件版本为V") + Hardware_version_high + "." + Hardware_version_low);
+		Serial.println(String("Hardware_version is V") + Hardware_version_high + "." + Hardware_version_low);
 	}
 	else
 	{
 		Vertion.Save_hardware_version(Hardware_version_high, Hardware_version_low);
-		Serial.println(String("成功存储硬件版本，当前的硬件版本为V") + Hardware_version_high + "." + Hardware_version_low);
+		Serial.println(String("Successfully store the hardware version, the current hardware version is V") + Hardware_version_high + "." + Hardware_version_low);
 	}
 #endif
 
@@ -193,6 +193,7 @@ void Request_Access_Network(void)
 
 		LED_NO_REGISTER;//未注册到服务器，红灯闪烁
 	}
+	Serial.println("Please press key 1");
 	while (SN.Verify_SN_Access_Network_Flag() == false) {
 
 		if (digitalRead(K1) == LOW) {
