@@ -17,6 +17,7 @@
 #include "Memory.h"
 #include "Command_Analysis.h"
 #include "fun_periph.h"
+#include "AT24CXX.h"
 //#include "Private_RTC.h"
 #include "Private_Timer.h"
 #include "private_sensor.h"
@@ -29,11 +30,11 @@
 #define SOFT_HARD_VERSION   1
 
 //测试宏
-#define Text    0
+#define Test    0
 
 //替换宏
 #define Software_version_high	0x01
-#define Software_version_low	0x00
+#define Software_version_low	0x10
 #define Hardware_version_high	0x02
 #define Hardware_version_low	0x00
 /*Timer timing time*/
@@ -75,6 +76,10 @@ void setup()
 	LoRa_Command_Analysis.Receive_LoRa_Cmd();
 
 	iwdg_feed();
+
+#if	Test
+	delay(3500);
+#endif
 
 #if SOFT_HARD_VERSION
 	Serial.println("");
@@ -141,8 +146,6 @@ void loop()
 {
     iwdg_feed();
 
-	//Data_Communication_with_Gateway();
-
 	private_sensor.Detect_Rain();
 
 	//这里是得到电平的反转（雨量传感器的检测到晴天或雨天），然后开始发送新的实时数据
@@ -177,6 +180,7 @@ void loop()
  */
 void Request_Access_Network(void)
 {
+	int x = 0;
 	if (SN.Verify_SN_Access_Network_Flag() == false)
 	{
 		g_Access_Network_Flag = false;
@@ -196,6 +200,16 @@ void Request_Access_Network(void)
 	Serial.println("Please press button 1 to register...");
 	while (SN.Verify_SN_Access_Network_Flag() == false)
 	{
+#if Test
+		if(x == 0)
+		{
+			delay(3000);
+			Message_Receipt.Report_General_Parameter();
+			x = 1;
+		}
+		LoRa_Command_Analysis.Receive_LoRa_Cmd();
+		iwdg_feed();
+#else
 		iwdg_feed();
 		if (digitalRead(K1) == LOW) {
 			iwdg_feed();
@@ -210,6 +224,7 @@ void Request_Access_Network(void)
 		}
 		LoRa_Command_Analysis.Receive_LoRa_Cmd();
 		iwdg_feed();
+#endif
 	}
 	g_Access_Network_Flag = true;
 }
@@ -319,6 +334,7 @@ void Timer2_Interrupt(void)
 {
 	Cyc_Send_Data_Num++;
 	if (Cyc_Send_Data_Num >= WorkParameter_Info.Read_Collect_Time())
+	// if (Cyc_Send_Data_Num >= 15)
 	{
 		Timer2.pause();
 		Cyc_Send_Data_Num = 0;

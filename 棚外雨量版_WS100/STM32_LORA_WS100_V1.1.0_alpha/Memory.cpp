@@ -9,6 +9,7 @@
  * 如有任何疑问，请发送邮件到： idlukeqing@163.com
 *************************************************************************************/
 #include "Memory.h"
+#include "AT24CXX.h"
 #include "User_CRC8.h"
 #include "fun_periph.h"
 #include <libmaple/bkp.h>
@@ -269,6 +270,20 @@ bool SN_Operations::Set_SN_Access_Network_Flag(void)
  */
 bool SN_Operations::Clear_SN_Access_Network_Flag(void)
 {
+#if Clear_SN
+
+	if (AT24CXX_ReadOneByte(SN_ACCESS_NETWORK_FLAG_ADDR) != 0x00)
+			{
+				EEPROM_Write_Enable();
+				AT24CXX_WriteOneByte(SN_ACCESS_NETWORK_FLAG_ADDR, 0x00);
+				EEPROM_Write_Disable();
+			}
+			/*验证标志位是否清除成功*/
+			if (AT24CXX_ReadOneByte(SN_ACCESS_NETWORK_FLAG_ADDR) == 0x00)
+				return true;
+			else
+				return false;
+#else
 	if (digitalRead(K1) == LOW)    //如果功能按键1按下
 	{
 		iwdg_feed();
@@ -291,6 +306,7 @@ bool SN_Operations::Clear_SN_Access_Network_Flag(void)
 		return false;
 	}
 	return false;
+#endif
 }
 
 /*

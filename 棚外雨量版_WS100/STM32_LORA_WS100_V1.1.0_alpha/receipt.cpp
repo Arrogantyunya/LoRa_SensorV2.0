@@ -419,7 +419,7 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = highByte(BatVol);
   Sensor_Buffer[Receipt_Length++] = lowByte(BatVol);
 
-  //Air Temperature
+  //Air Temperature空气温度
   NumOfDot = 2;
   if (Sensor_Data.g_Temp > 150){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -442,7 +442,7 @@ void Receipt::Send_Sensor_Data(void)
   else if (Temperature_Change_Flag == false)
     Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;//最高位是0，表示正的数值//10
 
-  //Air Humidity
+  //Air Humidity空气湿度
   memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   NumOfDot = 2;
   if ((int)Sensor_Data.g_Humi > 100 || (int)Sensor_Data.g_Humi <= 0){
@@ -456,7 +456,7 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //Air light
+  //Air light光照
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));
   memset(weathertr, 0x00, sizeof(weathertr));
@@ -478,13 +478,38 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //Air Pressure
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xFF;
-  Sensor_Buffer[Receipt_Length++] = 0xE1;
+  //WindSpeed风速
+  NumOfDot = 1;
+  if ((unsigned int)(Sensor_Data.g_Air_Wind_Speed*10) >= 65535)//虽然没插风速时，将值初始化为65535，但是除了10，变成了6553.5，所以乘10变回去
+  {
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+  }
+  else
+  {
+    PackBCD((char *)Data_BCD, Sensor_Data.g_Air_Wind_Speed, 4, NumOfDot);
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+  }
+  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
+  //WindSpeed风向
+  NumOfDot = 0;
+  if (Sensor_Data.g_Wind_DirCode >= 65535)
+  {
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+  }
+  else
+  {
+    PackBCD((char *)Data_BCD, Sensor_Data.g_Wind_DirCode, 4, NumOfDot);
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+  }
+
+  // //一个空的预留字节
+  // Sensor_Buffer[Receipt_Length++] = 0xFF
+ 
   //UV
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));

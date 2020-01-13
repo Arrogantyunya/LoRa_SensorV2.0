@@ -5,6 +5,8 @@
 #include <libmaple/bkp.h>
 #include <Arduino.h>
 
+#define Clear_SN	0
+
 #define EP_WP_PIN                               PB5
 
 /*使用EEPROM储存芯片的宏定义地址*/
