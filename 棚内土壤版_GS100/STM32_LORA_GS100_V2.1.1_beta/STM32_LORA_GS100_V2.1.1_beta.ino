@@ -43,10 +43,6 @@ void Key_Reset_LoRa_Parameter(void);
 unsigned char g_SN_Code[9] = { 0x00 }; //
 
 
-/*----------Function statement----------*/
-//void Sleep(void);
-
-
 // The setup() function runs once each time the micro-controller starts
 
 void setup()
@@ -129,10 +125,10 @@ void setup()
 
 
 	//-----极低电压不发送数据
-	if (Some_Peripheral.Get_Voltage() <= 2800)
+	if (Some_Peripheral.Get_Voltage() <= 3000)
 	{
 		delay(100);
-		if (Some_Peripheral.Get_Voltage() <= 2800)
+		if (Some_Peripheral.Get_Voltage() <= 3000)
 		{
 			Private_RTC.Set_onehour_Alarm();
 
@@ -145,17 +141,17 @@ void setup()
 	Data_Communication_with_Gateway();//发送数据至网关
 
 
-	if (Some_Peripheral.Get_Voltage() >= 3300)
+	if (Some_Peripheral.Get_Voltage() >= 3700)
 	{
-		LowBalFlag = 0;
+		LowBalFlag = Normal;
 	}
 	else
 	{
-		LowBalFlag = 1;  //如果电压小于3200mV大于2900mV
+		LowBalFlag = Low;  //如果电压小于3700mV大于3300mV
 
-		if (Some_Peripheral.Get_Voltage() <= 3000)
+		if (Some_Peripheral.Get_Voltage() <= 3300)
 		{
-			LowBalFlag = 2;//如果电压小于2900mV
+			LowBalFlag = Extremely_Low;//如果电压小于3000mV
 		}
 	}
 
@@ -249,7 +245,7 @@ void Sleep(void)
 	Serial.println("进入停机模式");
 	Serial.flush();
 	Some_Peripheral.Stop_LED();
-	PWR_485_OFF;
+	// PWR_485_OFF;
 	LORA_PWR_OFF;
 	USB_OFF;
 

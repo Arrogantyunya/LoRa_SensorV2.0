@@ -10,23 +10,41 @@ Sensor private_sensor;
 
 void Sensor::Get_All_Sensor_Data(void)
 {
+	int retry_num = 0;	int retry = 3;
 	PWR_485_ON;
 
-	delay(100);//经过测试，新版的PH的测量，为了使温湿度数据完整读出，需要等待温湿度传感器初始化完成。所以增加100ms的延时，否则可能出现温度数据读取不出来。
+	delay(1000);//经过测试，新版的PH的测量，为了使温湿度数据完整读出，需要等待温湿度传感器初始化完成。所以增加1s的延时，否则可能出现温度数据读取不出来。
 	Sensor_Data.g_Temp = sht10.readTemperatureC();
 	delay(100);
 	Sensor_Data.g_Humi = sht10.readHumidity();
 	delay(100);
-	private_sensor.Read_Solid_Humi_and_Temp(&Sensor_Data.g_Solid_Humi, &Sensor_Data.g_Solid_Temp, &Sensor_Data.g_Solid_Temp_Flag, 0x01);
+	while (private_sensor.Read_Solid_Humi_and_Temp(&Sensor_Data.g_Solid_Humi, &Sensor_Data.g_Solid_Temp, &Sensor_Data.g_Solid_Temp_Flag, 0x01) != 1 && retry_num < retry)
+	{
+		retry_num++;
+	}
+	retry_num = 0;
 	delay(100);
-	private_sensor.Read_Soild_PH(&Sensor_Data.g_Solid_PH, 0x02);
+	while ((private_sensor.Read_Salt_and_Cond(&Sensor_Data.g_Salt, &Sensor_Data.g_Cond, 0x01) != 1) && (retry_num < retry))
+	{
+		retry_num++;
+	}
+	retry_num = 0;
 	delay(100);
-	private_sensor.Read_Salt_and_Cond(&Sensor_Data.g_Salt, &Sensor_Data.g_Cond, 0x01);
+	while ((private_sensor.Read_Soild_PH(&Sensor_Data.g_Solid_PH, 0x02) != 1) && (retry_num < retry))
+	{
+		retry_num++;
+	}
 	delay(100);
+	// private_sensor.Read_Solid_Humi_and_Temp(&Sensor_Data.g_Solid_Humi, &Sensor_Data.g_Solid_Temp, &Sensor_Data.g_Solid_Temp_Flag, 0x01);
+	// delay(100);
+	// private_sensor.Read_Soild_PH(&Sensor_Data.g_Solid_PH, 0x02);
+	// delay(100);
+	// private_sensor.Read_Salt_and_Cond(&Sensor_Data.g_Salt, &Sensor_Data.g_Cond, 0x01);
+	// delay(100);
 	private_sensor.Read_Lux_and_UV(&Sensor_Data.g_Lux, &Sensor_Data.g_UV);
 	delay(100);
 
-	PWR_485_OFF;
+	// PWR_485_OFF;
 
 	Serial.print("temperature: ");
 	Serial.println(Sensor_Data.g_Temp);
@@ -108,7 +126,7 @@ void Sensor::Read_Lux_and_UV(unsigned long* lux, unsigned int* uv)
  *para    : humidity, temperature, address
  *return  : None
  */
-void Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned char* temp_flag, unsigned char addr)
+bool Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned char* temp_flag, unsigned char addr)
 {
 #if PR_3000_ECTH_N01
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00 };
@@ -129,7 +147,7 @@ void Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
 	Send_Cmd[7] = Send_CRC16 & 0xFF;
 
 	RS485_Serial.write(Send_Cmd, 8);
-	delay(100);
+	delay(300);
 
 	while (RS485_Serial.available() > 0) 
 	{
@@ -182,10 +200,17 @@ void Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
 
 		temperature_flag = ((tem_temp >> 15) & 0x01);
 	}
+	else
+	{
+		Serial.println("Read Solid Humi and Temp Error!!!<Read_Solid_Humi_and_Temp>");
+		return 0;
+	}
+	
 
 	*humi = hum;
 	*temp = tem_temp;
 	*temp_flag = temperature_flag;
+	return 1;
 }
 
 /*
@@ -193,12 +218,12 @@ void Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
  *para    : Solid_PH, address
  *return  : None
  */
-void Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
+bool Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
 {
 #if ST_500_Soil_PH
 	unsigned char Send_Cmd[8] = { 0x02, 0x03, 0x00, 0x08, 0x00, 0x01,0x00,0x00 };//02 03 0008 0001 05C8
 #elif JXBS_3001_PH
-	unsigned char Send_Cmd[8] = { 0x02, 0x03, 0x00, 0x0D, 0x00, 0x01, 0x00, 0x00 };
+	unsigned char Send_Cmd[8] = { 0x02, 0x03, 0x00, 0x06, 0x00, 0x01, 0x00, 0x00 };
 #endif
 	unsigned char Receive_Data[9] = { 0 };
 	unsigned char Length = 0;
@@ -212,9 +237,9 @@ void Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
 	Send_Cmd[7] = Send_CRC16 & 0xFF;
 
 	RS485_Serial.write(Send_Cmd, 8);
-	delay(100);
+	delay(300);
 
-	while (RS485_Serial.available() > 0)///02 03 02 0033 F851就是0x33 = 5.1
+	while (RS485_Serial.available() > 0)//02 03 02 02BC FC95就是0x2BC = 700,结果需要除以100，那么就是7
 	{
 		if (Length >= 8)
 		{
@@ -246,16 +271,19 @@ void Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
 		//Serial.println("SUCCESS");
 		//delay(3000);
 		ph_temp = Receive_Data[3] << 8 | Receive_Data[4];
+		Serial.println(String("ph_temp = ")+ph_temp);
 	}
 	else
 	{
-		//Serial.println("ERROR");
-		//delay(3000);
+		Serial.println("PH Read Error!!!<Read_Soild_PH>");
+		return 0;
 	}
 #if ST_500_Soil_PH
 	*Solid_PH = ph_temp * 10;
+	return 1;
 #elif JXBS_3001_PH
-	*Solid_PH = ph_temp * 10;
+	*Solid_PH = ph_temp;
+	return 1;
 #endif
 }
 
@@ -264,7 +292,7 @@ void Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
  *para    : salt, conductivity, address
  *return  : None
  */
-void Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned char addr)
+bool Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned char addr)
 {
 #if PR_3000_ECTH_N01
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00 };
@@ -284,7 +312,7 @@ void Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned
 	Send_Cmd[7] = Send_CRC16 & 0xFF;
 
 	RS485_Serial.write(Send_Cmd, 8);
-	delay(100);
+	delay(300);
 
 	while (RS485_Serial.available() > 0)
 	{
@@ -316,7 +344,14 @@ void Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned
 		salt_temp = Receive_Data[5] << 8 | Receive_Data[6];
 		cond_temp = Receive_Data[3] << 8 | Receive_Data[4];
 	}
+	else
+	{
+		Serial.println("Read Salt and Cond Error!!!<Read_Salt_and_Cond>");
+		return 0;
+	}
+	
 
 	*salt = salt_temp;
 	*cond = cond_temp;
+	return 1;
 }

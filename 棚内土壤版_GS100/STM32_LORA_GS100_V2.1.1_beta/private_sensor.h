@@ -37,9 +37,9 @@ public:
 private:
   void CJMCU6750_Init();
   void Read_Lux_and_UV(unsigned long *lux, unsigned int *uv);
-  void Read_Solid_Humi_and_Temp(float *humi, unsigned int *temp, unsigned char *temp_flag, unsigned char addr);
-   void Read_Soild_PH(unsigned int *Solid_PH, unsigned char addr);
-  void Read_Salt_and_Cond(unsigned int *salt, unsigned int *cond, unsigned char addr);
+  bool Read_Solid_Humi_and_Temp(float *humi, unsigned int *temp, unsigned char *temp_flag, unsigned char addr);
+  bool Read_Soild_PH(unsigned int *Solid_PH, unsigned char addr);
+  bool Read_Salt_and_Cond(unsigned int *salt, unsigned int *cond, unsigned char addr);
 };
 
 extern struct SENSOR_DATA Sensor_Data;

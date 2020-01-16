@@ -455,14 +455,23 @@ void Receipt::Send_Sensor_Data(void)
 	//Air Pressure气压
 	NumOfDot = 0;
 	memset(Data_BCD, 0x00, sizeof(Data_BCD));
-	PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_PH /10, 4, NumOfDot);
+	PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_PH/10, 4, NumOfDot);
 
-
-	Sensor_Buffer[Receipt_Length++] = 0x00;
-	Sensor_Buffer[Receipt_Length++] = 0x00;
-	Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-	Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-	Sensor_Buffer[Receipt_Length++] = 0xE1 | NumOfDot;
+  if (Sensor_Data.g_Solid_PH >= 65535)
+  {
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+	  Sensor_Buffer[Receipt_Length++] = 0xFF;
+	  Sensor_Buffer[Receipt_Length++] = 0xFF;
+	  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  }
+  else
+  {
+    Sensor_Buffer[Receipt_Length++] = 0x00;
+	  Sensor_Buffer[Receipt_Length++] = 0x00;
+	  Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+	  Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+  }
+  Sensor_Buffer[Receipt_Length++] = 0xE1 | NumOfDot;
 
 	////Solid Cond土壤电导率（土壤EC）
 	//NumOfDot = 0;

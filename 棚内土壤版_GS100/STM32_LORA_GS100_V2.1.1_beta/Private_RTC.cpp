@@ -125,7 +125,7 @@ void date::Set_Alarm(void)
 			Serial.println(String("服务器设置的间隔休眠时间超出设定的阈值【15s-12h】，间隔休眠时间修订为：Time_temp = ") + Time_temp + "s");
 		}
 
-		if (LowBalFlag == 1) //如果电压过低，强制休眠20分钟
+		if (LowBalFlag == Low) //如果电压过低，强制休眠20分钟
 		{
 			if (Time_temp > 1200) //如果设置的休眠时间大于20分钟，那么采用设置的时间
 			{
@@ -138,7 +138,7 @@ void date::Set_Alarm(void)
 				Serial.println(String("电池电压低，设置的间隔休眠时间修订为：Time_temp = 1200s"));
 			}
 		}
-		else if (LowBalFlag == 2)
+		else if (LowBalFlag == Extremely_Low)
 		{
 			if (Time_temp > 2400) //如果设置的休眠时间大于40分钟，那么采用设置的时间
 			{
@@ -159,12 +159,12 @@ void date::Set_Alarm(void)
 	}
 	else
 	{
-		if (LowBalFlag == 1)
+		if (LowBalFlag == Low)
 		{
 			alarm += 1200;  //如果电压过低，强制休眠20分钟
 			Serial.println(String("没有收到服务器的参数设置！！电池电压低，自动修订的间隔休眠时间为：Time_temp = 1200s"));
 		}
-		else if (LowBalFlag == 2)
+		else if (LowBalFlag == Extremely_Low)
 		{
 			alarm += 2400;  //如果电压极低，强制休眠40分钟
 			Serial.println(String("没有收到服务器的参数设置！！电池电压极低！！！自动修订的间隔休眠时间为：Time_temp = 2400s"));
