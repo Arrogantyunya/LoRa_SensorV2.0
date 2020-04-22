@@ -35,6 +35,7 @@
 #include "Memory.h"
 #include "receipt.h"
 #include "Private_RTC.h"
+#include <libmaple/iwdg.h>
 
 /*Create command analysis project*/
 Command_Analysis LoRa_Command_Analysis;
@@ -62,7 +63,10 @@ void Command_Analysis::Receive_LoRa_Cmd(void)
 	bool Receive_end_flag = false;  //Correct flag at end of frame.
 	g_Receive_Length = 0;
 
+	iwdg_feed();
+
 	while (LoRa_Serial.available() > 0) {
+		iwdg_feed();
 		g_Receive_cmd[g_Receive_Length++] = LoRa_Serial.read();
 		delay(5);
 		Serial.print(g_Receive_cmd[g_Receive_Length - 1], HEX);
@@ -91,13 +95,15 @@ void Command_Analysis::Receive_LoRa_Cmd(void)
 			Serial.println("Get frame end... <Receive_LoRa_Cmd>");
 		}
 	}
-	if (Receive_end_flag == true) {
+	if (Receive_end_flag == true) 
+	{
 		Serial.println("Parsing LoRa command... <Receive_LoRa_Cmd>");
 		Receive_end_flag = false;
-		Receive_Data_Analysis(); //根据帧ID分析判断执行哪一个接收到的通用指令或私有指令
+		Receive_Data_Analysis();//接收数据分析
 		g_Receive_Length = 0;
 	}
-	else {
+	else
+	{
 		g_Receive_Length = 0;
 	}
 }
@@ -111,6 +117,7 @@ void Command_Analysis::Receive_LoRa_Cmd(void)
 Frame_ID Command_Analysis::FrameID_Analysis(void)
 {
 	unsigned int frame_id = ((g_Receive_cmd[1] << 8) | g_Receive_cmd[2]);
+	iwdg_feed();
 	switch (frame_id) {
 	case 0xA011: return Work_Para;       break;
 	case 0xA012: return Set_Group_Num;   break;
@@ -130,6 +137,7 @@ Frame_ID Command_Analysis::FrameID_Analysis(void)
 bool Command_Analysis::Verify_CRC8(unsigned char verify_data_base_addr, unsigned char verify_data_len)
 {
 	unsigned char Receive_CRC8 = GetCrc8(&g_Receive_cmd[verify_data_base_addr], verify_data_len);
+	iwdg_feed();
 	if (Receive_CRC8 == g_Receive_cmd[g_Receive_Length - 7])
 		return true;
 	else
@@ -145,6 +153,7 @@ bool Command_Analysis::Verify_CRC8(unsigned char verify_data_base_addr, unsigned
 bool Command_Analysis::Verify_Device_Type_ID(void)
 {
 	unsigned int Device_Type_ID = ((g_Receive_cmd[4] << 8) | g_Receive_cmd[5]);
+	iwdg_feed();
 	if (Device_Type_ID == DEVICE_TYPE_ID)
 		return true;
 	else
@@ -170,9 +179,10 @@ void Command_Analysis::Verify_Mass_Commands(void)
  */
 bool Command_Analysis::Verify_Area_Number(void)
 {
+	iwdg_feed();
 	if (g_Receive_cmd[7] == 0x55) return true;  //Group control instructions.
 
-	unsigned char Local_Area_Number = Control_Info.Read_Area_Number();
+	unsigned char Local_Area_Number = SN.Read_Area_Number();
 	if (g_Receive_cmd[7] == Local_Area_Number || Local_Area_Number == 0)
 		return true;
 	else
@@ -191,11 +201,12 @@ bool Command_Analysis::Verify_Area_Number(void)
  */
 bool Command_Analysis::Verify_Work_Group(void)
 {
+	iwdg_feed();
 	if (g_Receive_cmd[8] == 0x55) return true;  //Group control instructions.
 
 	unsigned char Local_Group_Number[5], Receive_Group_Single_Number = g_Receive_cmd[8];
 	unsigned char Undefined_Group_Num = 0;
-	Control_Info.Read_Group_Number(&Local_Group_Number[0]);
+	SN.Read_Group_Number(&Local_Group_Number[0]);
 
 	for (unsigned char i = 0; i < 5; i++) {
 		if (Receive_Group_Single_Number == Local_Group_Number[i]) return true;
@@ -220,6 +231,7 @@ bool Command_Analysis::Verify_Work_Group(void)
  */
 bool Command_Analysis::Verify_Frame_Validity(unsigned char verify_data_base_addr, unsigned char verify_data_len, bool area_flag = true, bool group_flag = true)
 {
+	iwdg_feed();
 	if (Verify_CRC8(verify_data_base_addr, verify_data_len) == true) {
 		if (Verify_Device_Type_ID() == true) {
 			Verify_Mass_Commands();
@@ -254,12 +266,13 @@ bool Command_Analysis::Verify_Frame_Validity(unsigned char verify_data_base_addr
  */
 void Command_Analysis::Receive_Data_Analysis(void)
 {
+	iwdg_feed();
 	switch (FrameID_Analysis()) {
 		//General commamd.
-	case Work_Para: Query_Current_Work_Para();  break;
+	case Work_Para: Query_Current_Work_Para();  break;//查询当前工作段
 	case Set_Group_Num: Set_Group_Number();         break;
-	case Work_Status: Detailed_Work_Status();     break;
 	case SN_Area_Channel: Set_SN_Area_Channel();      break;
+	case Work_Status: Detailed_Work_Status();     break;//详细的工作状态
 		//Private command.
 	case Work_Limit: Working_Limit_Command();    break;
 	}
@@ -276,51 +289,23 @@ void Command_Analysis::Query_Current_Work_Para(void)
 	//  帧头     |    帧ID   |  数据长度   |    设备类型ID   | 群发标志位  |所在执行区域号 | 申号标志 |  查询角色 | 采集时间间隔      |  时间   |  预留位     |  校验码  |     帧尾 
 	//Frame head | Frame ID | Data Length | Device type ID |  mass flag |  Area number | intent   |  channel | collect interval  |  RTC   |   allocate  |  CRC8   |  Frame end
 	//  1 byte       2 byte      1 byte          2 byte        1 byte       1 byte       1 byte      1 byte      2 byte           7 byte      8 byte     1 byte      6 byte
+	iwdg_feed();
 	if (g_Access_Network_Flag == false)  return;  //Unregistered to server, ignored.
 
 	if (Verify_Frame_Validity(4, 23, true, false) == true) {
 		Private_RTC.Update_RTC(&g_Receive_cmd[12]);
 
 		unsigned int time_temp = (g_Receive_cmd[10] << 8 | g_Receive_cmd[11]);
+		Serial.println(String("服务器设置的time_temp = ") + time_temp);
 		if (WorkParameter_Info.Save_Collect_Time(time_temp))
-		{
 			g_Get_Para_Flag = true;
-		}
+		else
+			Serial.println("Save collect time failed !!!保存收集时间失败!!");
 
 		if (g_Receive_cmd[8] == 0X55)
-		{
-			Message_Receipt.Report_General_Parameter();//上报本设备通用设置参数E011
-		}
-		else if (g_Receive_cmd[8] == 0X01)
-		{
-			//if (g_Receive_cmd[18] == 0XF1)//0xF0节点，0xF1网关
-			//{
-			//	//if (LoRa_Para_Config.Read_LoRa_Com_Mode() == 0xF1)
-			//	if (LoRa_Para_Config.Save_LoRa_Com_Mode(0xF1) == true)
-			//	{
-			//		LoRa_MHL9LF.Parameter_Init(Only_net);//设置所有的参数
-			//	}
-			//	else
-			//	{
-			//		Serial.println("配置节点模式保存失败");
-			//	}
-			//}
-			//else
-			//{
-			//	if (LoRa_Para_Config.Save_LoRa_Com_Mode(0xF0) == true)
-			//	{
-			//		LoRa_MHL9LF.Parameter_Init(Only_net);//设置所有的参数
-			//	}
-			//	else
-			//	{
-			//		Serial.println("配置节点模式保存失败");
-			//	}
-			//}
-		}
+			Message_Receipt.Report_General_Parameter();
 		else
-		{
-			Message_Receipt.General_Receipt(SetWorkParaOK, 1);//发送通用回执信息给服务器E015
-		}
+			Message_Receipt.General_Receipt(SetWorkParaOK, 1);
 	}
 
 	memset(g_Receive_cmd, 0x00, g_Receive_Length);
@@ -338,15 +323,18 @@ void Command_Analysis::Set_Group_Number(void)
 	//  帧头     |    帧ID   |  数据长度   |    设备类型ID   | 群发标志位   |所在执行区域号 | 工作组号   | 设备路数 |  校验码  |     帧尾 
 	//Frame head | Frame ID | Data Length | Device type ID | mass flag   |  Area number |  workgroup |  channel |   CRC8 |  |  Frame end
 	//  1 byte       2 byte      1 byte          2 byte        1 byte         1 byte        5 byte       1 byte    1 byte      6 byte
+	iwdg_feed();
 	if (g_Access_Network_Flag == false)  return;  //Unregistered to server, ignored.
 
 	if (Verify_Frame_Validity(4, 10, true, false) == true) {
-		if (Control_Info.Save_Group_Number(&g_Receive_cmd[8]) == true) {
+		if (SN.Save_Group_Number(&g_Receive_cmd[8]) == true) {
 			Serial.println("Save group number success... <Set_Group_Number>");
+			Serial.println("保存组号成功…<Set_Group_Number>");
 			Message_Receipt.General_Receipt(AssignGroupIdArrayOk, 1);
 		}
 		else {
 			Serial.println("Save group number failed !!! <Set_Group_Number>");
+			Serial.println("保存组号失败!!<Set_Group_Number>");
 			Set_Motor_Status(STORE_EXCEPTION);
 			Message_Receipt.General_Receipt(AssignGroupIdArrayErr, 1);
 		}
@@ -365,12 +353,12 @@ void Command_Analysis::Set_SN_Area_Channel(void)
 	//  帧头     |    帧ID   |  数据长度   |    设备类型ID   | 群发标志位   | 所在执行区域号 |  设备路数      |  子设备总路数           |  SN码       | 校验码   |     帧尾 
 	//Frame head | Frame ID | Data Length | Device type ID | mass flag   |   Area number | Device channel |  subordinate channel   | SN code     |  CRC8   |  Frame end
 	//  1 byte       2 byte      1 byte          2 byte        1 byte          1 byte          1 byte           1 byte                9 byte       1 byte      6 byte
-
+	iwdg_feed();
 	if (Verify_Frame_Validity(4, 15, false, false) == true) {
 		if (SN.Save_SN_Code(&g_Receive_cmd[10]) == true && SN.Save_BKP_SN_Code(&g_Receive_cmd[10]) == true) {
 			Serial.println("Set SN code success... <Set_SN_Area_Channel>");
 
-			if (Control_Info.Save_Area_Number(g_Receive_cmd[7]) == true) {
+			if (SN.Save_Area_Number(g_Receive_cmd[7]) == true) {
 				Serial.println("Save area number success... <Set_SN_Area_Channel>");
 
 				Message_Receipt.General_Receipt(SetSnAndSlaverCountOk, 1);
@@ -378,13 +366,11 @@ void Command_Analysis::Set_SN_Area_Channel(void)
 			}
 			else {
 				Serial.println("Save area number ERROR !!! <Set_SN_Area_Channel>");
-				Set_Motor_Status(STORE_EXCEPTION);
 				Message_Receipt.General_Receipt(SetSnAndSlaverCountErr, 1);
 			}
 		}
 		else {
 			Serial.println("Save SN code ERROR !!! <Set_SN_Area_Channel>");
-			Set_Motor_Status(STORE_EXCEPTION);
 			Message_Receipt.General_Receipt(SetSnAndSlaverCountErr, 1);
 		}
 	}
@@ -402,6 +388,7 @@ void Command_Analysis::Detailed_Work_Status(void)
 	//  帧头     |    帧ID   |  数据长度   |    设备类型ID   | 群发标志位  |所在执行区域号 |  设备路数 |  校验码  |     帧尾 
 	//Frame head | Frame ID | Data Length | Device type ID |  mass flag |  Area number |   channel |   CRC8 |  |  Frame end
 	//  1 byte       2 byte      1 byte          2 byte        1 byte        1 byte         1 byte    1 byte      6 byte
+	iwdg_feed();
 	if (g_Access_Network_Flag == false)  return;  //Unregistered to server, ignored.
 
 	if (Verify_Frame_Validity(4, 5, true, false) == true)

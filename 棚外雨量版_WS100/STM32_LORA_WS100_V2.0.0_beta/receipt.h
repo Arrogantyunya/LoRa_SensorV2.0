@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define DEVICE_TYPE_ID  0x0001
+#define DEVICE_TYPE_ID  0x0003
 
 enum ReceiptStatus{
   FactoryMode = 0, AskUploadParamsOk, AskUploadParamsErr, AssignGroupIdArrayOk, AssignGroupIdArrayErr, SetSnAndSlaverCountOk, 

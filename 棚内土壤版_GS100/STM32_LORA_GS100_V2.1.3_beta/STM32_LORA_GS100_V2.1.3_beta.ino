@@ -1,8 +1,8 @@
 // Visual Micro is in vMicro>General>Tutorial Mode
 // 
 /*
-    Name:       STM32_LORA_GS100_V3.0.0_beta.ino
-    Created:	2020/04/22 星期三 09:31:05
+    Name:       STM32_LORA_GS100_V2.1.3_beta.ino
+    Created:	2020/04/22 星期三 11:02:05
     Author:     刘家辉
 */
 
@@ -20,7 +20,6 @@
 #include "Private_RTC.h"
 #include "private_sensor.h"
 #include "receipt.h"
-#include "Adafruit_ADS1015.h"
 
 
 // Define Function Prototypes that use User Types below here or use a .h file
@@ -28,8 +27,8 @@
 #define test_time 				2000 
 #define Collect_battery_num		2
 #define SOFT_HARD_VERSION 		true
-#define Software_version_high	0x03
-#define Software_version_low	0x00
+#define Software_version_high	0x02
+#define Software_version_low	0x13
 #define Hardware_version_high	0x07
 #define Hardware_version_low	0x10
 
@@ -47,22 +46,22 @@ void Debug_Project(void);
 /* 变量 */
 String comdata = "";//串口接收的字符串
 unsigned char g_SN_Code[9] = { 0x00 }; //
-bool Debug = false;  
+bool Debug = false;
 
 
 // The setup() function runs once each time the micro-controller starts
-
 void setup()
 {
 	afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
+
 
 	Some_Peripheral.Peripheral_GPIO_Config();
 
 	Serial.begin(9600);         //DEBUG Serial baud
 	LoRa_MHL9LF.BaudRate(9600);    //LoRa SoftwareSerial baud
 	RS485_Serial.begin(9600);  //ModBus SoftwareSerial baud
-	ads.begin();//就是 Wire.begin()
 	bkp_init(); //Initialize backup register.
+
 
 	LoRa_MHL9LF.LoRa_GPIO_Config();
 	RS485_GPIO_Config();  //RS485 GPIO configuration
@@ -126,7 +125,7 @@ void setup()
 		LoRa_Command_Analysis.Receive_LoRa_Cmd();//等待接收指令
 		delay(3000);
 	}
-	Serial.println("SN self_check success.");
+	Serial.println("SN self_check success. ");
 	Serial.print("My SN is:");
 	for (size_t i = 0; i < 9; i++)
 	{
@@ -134,7 +133,7 @@ void setup()
 		Serial.print(" ");
 	}
 	Serial.println();
-
+	
 	LED_RUNNING;
 
 	unsigned int Battery_Voltage = 0;
@@ -154,12 +153,15 @@ void setup()
 		if (Battery_Voltage <= 3000)
 		{
 			Private_RTC.Set_onehour_Alarm();
+
 			Sleep();
 		}
 	}
 	//-----极低电压不发送数据
 
+
 	Data_Communication_with_Gateway();//发送数据至网关
+
 
 	if (Battery_Voltage >= 3700)
 	{
@@ -183,17 +185,8 @@ void setup()
 void loop()
 {
 	Debug_Project();//现场调试模式
+
 	Sleep();//进入停机模式
-	
-	// Data_Communication_with_Gateway();//发送数据至网关
-	// int a = analogRead(AD_V_PIN);
-	// double ADC_num = a * ADC_RATE * 11.95;
-	// Serial.print(a);
-	// Serial.println(String(">:") + ADC_num + "mv");
-	// // float x = map(ADC_num,0,5000,0,20);
-	// double x = ADC_num*20000/5000;
-	// Serial.println(String("x = ") + x + "um");
-	// delay(1000);
 }
 
 /*
@@ -261,12 +254,10 @@ void Data_Communication_with_Gateway(void)
 
 		wait_time = millis();
 
-	} while (Get_Para_num < 1);
+	} while (Get_Para_num < 3);
 
-	if (Get_Para_num == 1) //If it don't receive message three times.
-	{
+	if (Get_Para_num == 3) //If it don't receive message three times.
 		Serial.println("No parameter were received !!!");
-	}
 }
 
 /*

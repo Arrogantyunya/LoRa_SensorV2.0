@@ -333,71 +333,22 @@ bool LoRa::Parse_Command(unsigned char *addr_temp, unsigned char len, unsigned c
 /*
  @brief     : 得到信噪比和接收信号强度参数。
  @param     : 1.接收的数据回执
-			  2.接收数据回执的长度
-			  3.返回分析的数据缓存
+              2.接收数据回执的长度
+              3.返回分析的数据缓存
  @return    : 无
  */
 void LoRa::Get_CSQ(unsigned char *addr_temp, unsigned char len, unsigned char *data_buffer)
-{	
-	/* 	+CSQ:12,-72 
-		+CSQ:-12,-172*/  /* '0' = 48	'9' = 57 */
-	/*信噪比和接收强度两个值中间有逗号隔开，这里去除逗号，得到数值*/
-	String Str_CSQ; String Str_SNR; String Str_RSSI;
-	bool Division = false;//分割标志位
+{
+    unsigned char i = 0, j = 0;
 
-	memset(data_buffer, 0x00, sizeof(data_buffer));
-	data_buffer[2] = 0xE0;data_buffer[3] = 0xE0;
-	
-	for (size_t i = 0; i < len; i++)
-	{
-		Str_CSQ += String(addr_temp[i]);
-		if(addr_temp[i] == ',')
-		{
-			Division = true;
-			continue;
-		}
+    /*信噪比和接收强度两个值中间有逗号隔开，这里去除逗号，得到数值*/
+    for (; addr_temp[i] != ','; i++)
+        data_buffer[i] = addr_temp[i];
 
-		if(addr_temp[i] >= '0' && addr_temp[i] <= '9')
-		{
-			addr_temp[i] -= '0';
-		}
-		
-		if(!Division)
-		{
-			if(addr_temp[i] == '-')
-			{
-				Serial.println("SNR为负数");
-				data_buffer[3] = 0xF0;//如果SNR为负数，那么将数组第4个置为F0，代表为负
-			}
-			else
-			{
-				Str_SNR += String(addr_temp[i]);
-			}
-		}
-		else
-		{
-			if(addr_temp[i] == '-')
-			{
-				Serial.println("RSSI为负数");	
-				data_buffer[3] = 0xF0;//如果SNR为负数，那么将数组第4个置为F0，代表为负
-			}
-			else
-			{
-				Str_RSSI += String(addr_temp[i]);
-			}
-		}
-	}
-	Serial.println(String("Str_CSQ = ") + Str_CSQ);
-	Serial.print(String("Str_SNR = "));
-    data_buffer[2] == 0xF0?Serial.print("-"):(data_buffer[2] == 0xE0?Serial.print(""):Serial.print("读取错误"));
-	Serial.println(Str_SNR + " (DEC)");
+    data_buffer[i++] = 0x55;
 
-    Serial.print(String("Str_RSSI = "));
-    data_buffer[3] == 0xF0?Serial.print("-"):(data_buffer[3] == 0xE0?Serial.print(""):Serial.print("读取错误"));
-    Serial.println(Str_RSSI + " (DEC)");
-
-	data_buffer[0] = Str_SNR.toInt();
-	data_buffer[1] = Str_RSSI.toInt();
+    for (j = i; j < len; j++)
+        data_buffer[j] = addr_temp[j];
 }
 
 /*

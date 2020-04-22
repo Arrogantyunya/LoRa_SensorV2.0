@@ -8,6 +8,7 @@
 #include "private_sensor.h"
 #include "BCD_CON.h"
 #include "Private_RTC.h"
+#include <libmaple/iwdg.h>
 
 Receipt Message_Receipt;
 
@@ -28,6 +29,7 @@ unsigned char gLoRaCSQ[4] = { 0 };  //接收LoRa发送和接收的信号强度
 void Receipt::Clear_Server_LoRa_Buffer(void)
 {
   unsigned char Buffer[6] = {0x0D, 0x0A, 0x0D, 0x0A, 0x0D, 0x0A}; //Frame end.
+  iwdg_feed();
   LoRa_Serial.write(Buffer, 6);
   delay(SEND_END_DELAY);
 }
@@ -41,6 +43,7 @@ void Receipt::Clear_Server_LoRa_Buffer(void)
 void Receipt::Receipt_Random_Wait_Value(unsigned long int *random_value)
 {
   unsigned char Random_Seed;
+  iwdg_feed();
   SN.Read_Random_Seed(&Random_Seed);
   /*Random_Seed * 1ms, 2S + Random_Seed * 0.1ms, 200ms*/
   *random_value = random(Random_Seed * 1000, 2000000) + random(Random_Seed *100, 200000);
@@ -64,9 +67,12 @@ void Receipt::Report_General_Parameter(void)
   unsigned char Frame_Length = 0;
   unsigned char Data_Temp[10];
   unsigned long int Random_Send_Interval = 0;
+  iwdg_feed();
     
   Receipt_Random_Wait_Value(&Random_Send_Interval);
   delayMicroseconds(Random_Send_Interval);
+
+  iwdg_feed();
 
 #if CLEAR_BUFFER_FLAG
   Clear_Server_LoRa_Buffer();
@@ -82,9 +88,9 @@ void Receipt::Report_General_Parameter(void)
   //Verify mass commands flag
   g_Mass_Command_Flag == true ? Report_Frame[Frame_Length++] = 0x55 : Report_Frame[Frame_Length++] = 0x00;
   //Area number
-  Report_Frame[Frame_Length++] = Control_Info.Read_Area_Number();
+  Report_Frame[Frame_Length++] = SN.Read_Area_Number();
   //Group number
-  Control_Info.Read_Group_Number(&Data_Temp[0]);
+  SN.Read_Group_Number(&Data_Temp[0]);
   for (unsigned char i = 0; i < 5; i++)
     Report_Frame[Frame_Length++] = Data_Temp[i];
   //SN code
@@ -98,7 +104,7 @@ void Receipt::Report_General_Parameter(void)
   Report_Frame[Frame_Length++] = 0x00; 
   //RTC 
   for (unsigned char i = 0; i < 7; i++)
-	  Report_Frame[Frame_Length++] = 0x00;
+    Report_Frame[Frame_Length++] = 0x00; 
   //Software_versio
   Report_Frame[Frame_Length++] = Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR);
   Report_Frame[Frame_Length++] = Vertion.Read_Software_version(SOFT_VERSION_BASE_ADDR + 1);
@@ -106,8 +112,8 @@ void Receipt::Report_General_Parameter(void)
   Report_Frame[Frame_Length++] = Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR);
   Report_Frame[Frame_Length++] = Vertion.Read_Software_version(HARD_VERSION_BASE_ADDR + 1);
   //The reserved 4 bytes.
-  for (unsigned char i = 0; i < 4; i++)
-	  Report_Frame[Frame_Length++] = 0x00;
+  for (unsigned char i = 0; i < 4; i++)  
+    Report_Frame[Frame_Length++] = 0x00;
   //CRC8
   Report_Frame[Frame_Length++] = GetCrc8(&Report_Frame[4], 0x24);
   //Frame end
@@ -136,11 +142,15 @@ void Receipt::Request_Set_Group_Number(void)
   //  1 byte        2 byte      1 byte          2 byte       1 byte       1 byte          1 byte       1 byte     6 byte
   unsigned char Request_Frame[20] = {0};
   unsigned char Frame_Length = 0;
-  //unsigned char Random_Seed;
+  // unsigned char Random_Seed;
   unsigned long int Random_Send_Interval = 0;
+
+  iwdg_feed();
     
   Receipt_Random_Wait_Value(&Random_Send_Interval);
   delayMicroseconds(Random_Send_Interval);
+
+  iwdg_feed();
 
 #if CLEAR_BUFFER_FLAG
   Clear_Server_LoRa_Buffer();
@@ -156,7 +166,7 @@ void Receipt::Request_Set_Group_Number(void)
   //Verify mass commands flag
   g_Mass_Command_Flag == true ? Request_Frame[Frame_Length++] = 0x55 : Request_Frame[Frame_Length++] = 0x00;
   //Area number.
-  Request_Frame[Frame_Length++] = Control_Info.Read_Area_Number();  //Aread number
+  Request_Frame[Frame_Length++] = SN.Read_Area_Number();  //Aread number
   Request_Frame[Frame_Length++] = 0x01; //Master device
   Request_Frame[Frame_Length++] = GetCrc8(&Request_Frame[4], 0x05);
   //Frame end
@@ -185,11 +195,15 @@ void Receipt::Request_Device_SN_and_Channel(void)
   //  1 byte        2 byte      1 byte          2 byte        1 byte      1 byte          1 byte       1 byte     6 byte
   unsigned char Request_Frame[20] = {0};
   unsigned char Frame_Length = 0;
-  //unsigned char Random_Seed;
+  // unsigned char Random_Seed;
   unsigned long int Random_Send_Interval = 0;
+
+  iwdg_feed();
     
   Receipt_Random_Wait_Value(&Random_Send_Interval);
   delayMicroseconds(Random_Send_Interval);
+
+  iwdg_feed();
 
 #if CLEAR_BUFFER_FLAG
   Clear_Server_LoRa_Buffer();
@@ -205,7 +219,7 @@ void Receipt::Request_Device_SN_and_Channel(void)
   //Verify mass commands flag
   g_Mass_Command_Flag == true ? Request_Frame[Frame_Length++] = 0x55 : Request_Frame[Frame_Length++] = 0x00;
   //Area number.
-  Request_Frame[Frame_Length++] = Control_Info.Read_Area_Number();  //Aread number
+  Request_Frame[Frame_Length++] = SN.Read_Area_Number();  //Aread number
   Request_Frame[Frame_Length++] = 0x01; //Master device
   Request_Frame[Frame_Length++] = GetCrc8(&Request_Frame[4], 0x05);
   //Frame end
@@ -235,11 +249,15 @@ void Receipt::Working_Parameter_Receipt(void)
   unsigned char Receipt_Frame[30] = {0};
   unsigned char Receipt_Length = 0;
   unsigned char LoRa_CSQ[2] = {0};
-  //unsigned char Random_Seed;
+  // unsigned char Random_Seed;
   unsigned long int Random_Send_Interval = 0;
+
+  iwdg_feed();
     
   Receipt_Random_Wait_Value(&Random_Send_Interval);
   delayMicroseconds(Random_Send_Interval);
+
+  iwdg_feed();
 
   //Read LoRa module's SNR and RSSI
   LoRa_MHL9LF.LoRa_AT(LoRa_CSQ, true, AT_CSQ_, 0);
@@ -258,7 +276,7 @@ void Receipt::Working_Parameter_Receipt(void)
   //Verify mass commands flag
   g_Mass_Command_Flag == true ? Receipt_Frame[Receipt_Length++] = 0x55 : Receipt_Frame[Receipt_Length++] = 0x00;
   //Area number
-  Receipt_Frame[Receipt_Length++] = Control_Info.Read_Area_Number();
+  Receipt_Frame[Receipt_Length++] = SN.Read_Area_Number();
   //channel
   Receipt_Frame[Receipt_Length++] = 0x01;
   //device private status
@@ -311,11 +329,15 @@ void Receipt::General_Receipt(unsigned char status, unsigned char send_times)
   //  1 byte        2 byte      1 byte          2 byte       1 byte        1 byte          1 byte       1 byte          8 byte      1 byte     6 byte
   unsigned char Receipt_Frame[25] = {0};
   unsigned char Receipt_Length = 0;
-  //unsigned char Random_Seed;
+  // unsigned char Random_Seed;
   unsigned long int Random_Send_Interval = 0;
+
+  iwdg_feed();
     
   Receipt_Random_Wait_Value(&Random_Send_Interval);
   delayMicroseconds(Random_Send_Interval);
+
+  iwdg_feed();
 
 #if CLEAR_BUFFER_FLAG
   Clear_Server_LoRa_Buffer();
@@ -331,7 +353,7 @@ void Receipt::General_Receipt(unsigned char status, unsigned char send_times)
   //Verify mass commands flag
   g_Mass_Command_Flag == true ? Receipt_Frame[Receipt_Length++] = 0x55 : Receipt_Frame[Receipt_Length++] = 0x00;
   //Area Number.
-  Receipt_Frame[Receipt_Length++] = Control_Info.Read_Area_Number();
+  Receipt_Frame[Receipt_Length++] = SN.Read_Area_Number();
   Receipt_Frame[Receipt_Length++] = 0x01; //Master device
   Receipt_Frame[Receipt_Length++] = status;
   //The reserved 8 bytes
@@ -361,19 +383,23 @@ void Receipt::General_Receipt(unsigned char status, unsigned char send_times)
  */
 void Receipt::Send_Sensor_Data(void)
 {
-  //unsigned char HiByte, LoByte, flag;
+  // unsigned char HiByte, LoByte, flag;
   unsigned char NumOfDot = 0;
   unsigned char Data_BCD[4] = {0};//把转好的BCD数据存入这个数组
   char weathertr[20] = {0};
   unsigned char Sensor_Buffer[128] = {0};
   unsigned char Receipt_Length = 0;
   bool Temperature_Change_Flag = false;
-  float SoliTemp_Value = 0.0;
-  //unsigned char Random_Seed;
-  unsigned long int Random_Send_Interval = 0;
+  // float SoliTemp_Value = 0.0;
+  // unsigned char Random_Seed;
+  // unsigned long int Random_Send_Interval = 0;
+
+  //iwdg_feed();
     
-  Receipt_Random_Wait_Value(&Random_Send_Interval);
-  delayMicroseconds(Random_Send_Interval);
+  // Receipt_Random_Wait_Value(&Random_Send_Interval);
+  // delayMicroseconds(Random_Send_Interval);
+
+  iwdg_feed();
 
 #if CLEAR_BUFFER_FLAG
   Clear_Server_LoRa_Buffer();
@@ -385,12 +411,13 @@ void Receipt::Send_Sensor_Data(void)
 		LoRa_MHL9LF.LoRa_AT(gLoRaCSQ, true, AT_CSQ_, 0);
 	}
 
-  private_sensor.Get_All_Sensor_Data();
+  private_sensor.Get_All_Sensor_Data();//得到所有传感器的数据
+  iwdg_feed();
   
   Sensor_Buffer[Receipt_Length++] = 0xFE; //Frame head.
   Sensor_Buffer[Receipt_Length++] = 0xD0; //Frame ID
   Sensor_Buffer[Receipt_Length++] = 0x01;
-  Sensor_Buffer[Receipt_Length++] = 0x34; //Data length
+  Sensor_Buffer[Receipt_Length++] = 0x29; //Data length
   //Sensor type ID
   Sensor_Buffer[Receipt_Length++] = highByte(DEVICE_TYPE_ID); //Sensor type ID
   Sensor_Buffer[Receipt_Length++] = lowByte(DEVICE_TYPE_ID);
@@ -401,7 +428,6 @@ void Receipt::Send_Sensor_Data(void)
 
   //Air Temperature空气温度
   NumOfDot = 2;
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   if (Sensor_Data.g_Temp > 150){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -437,7 +463,7 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //Air light
+  //Air light光照
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));
   memset(weathertr, 0x00, sizeof(weathertr));
@@ -459,49 +485,39 @@ void Receipt::Send_Sensor_Data(void)
   }
   Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-  //-------------------------------------------------------
-	//Air Pressure气压
-	NumOfDot = 0;
-	memset(Data_BCD, 0x00, sizeof(Data_BCD));
-	PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_PH/10, 4, NumOfDot);
-
-  if (Sensor_Data.g_Solid_PH >= 65535)
+  //WindSpeed风速
+  NumOfDot = 1;
+  if ((unsigned int)(Sensor_Data.g_Air_Wind_Speed*10) >= 65535)//虽然没插风速时，将值初始化为65535，但是除了10，变成了6553.5，所以乘10变回去
   {
     Sensor_Buffer[Receipt_Length++] = 0xFF;
-	  Sensor_Buffer[Receipt_Length++] = 0xFF;
-	  Sensor_Buffer[Receipt_Length++] = 0xFF;
-	  Sensor_Buffer[Receipt_Length++] = 0xFF;
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
   }
   else
   {
-    Sensor_Buffer[Receipt_Length++] = 0x00;
-	  Sensor_Buffer[Receipt_Length++] = 0x00;
-	  Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-	  Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+    PackBCD((char *)Data_BCD, Sensor_Data.g_Air_Wind_Speed, 4, NumOfDot);
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
   }
-  Sensor_Buffer[Receipt_Length++] = 0xE1 | NumOfDot;
+  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
 
-	////Solid Cond土壤电导率（土壤EC）
-	//NumOfDot = 0;
-	//memset(Data_BCD, 0x00, sizeof(Data_BCD));
+  //WindSpeed风向
+  NumOfDot = 0;
+  if (Sensor_Data.g_Wind_DirCode >= 65535)
+  {
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+    Sensor_Buffer[Receipt_Length++] = 0xFF;
+  }
+  else
+  {
+    PackBCD((char *)Data_BCD, Sensor_Data.g_Wind_DirCode, 4, NumOfDot);
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
+    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
+  }
 
-	//if (Sensor_Data.g_Cond >= 65535)
-	//{
-	//	Sensor_Buffer[Receipt_Length++] = 0xFF;
-	//	Sensor_Buffer[Receipt_Length++] = 0xFF;
-
-	//}
-	//else 
-	//{
-	//	PackBCD((char *)Data_BCD, Sensor_Data.g_Cond, 4, NumOfDot);
-
-	//	Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-	//	Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-	//}
-	//Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
-	//---------------------------------------------------------
-
-  //UV紫外线
+  // //一个空的预留字节
+  // Sensor_Buffer[Receipt_Length++] = 0xFF
+ 
+  //UV
   NumOfDot = 0;
   memset(Data_BCD, 0x00, sizeof(Data_BCD));
 
@@ -521,99 +537,15 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = 0xFF;
   Sensor_Buffer[Receipt_Length++] = 0xE0;
 
-  //TVOC总挥发性有机化合物(Total Volatile Organic Compounds)已弃用
-  //改为了植物位移传感器
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
-  NumOfDot = 0;
-  if ((int)(Sensor_Data.g_Displacement) > 20000){//因为量程只有20mm（20000μm）
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-  }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Displacement, 4, NumOfDot);//把位移转换成BCD码
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
+  //TVOC
+  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  Sensor_Buffer[Receipt_Length++] = 0xE0;
 
-  //Solid temperature土壤温度
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
-  NumOfDot = 2;
-  if (Sensor_Data.g_Solid_Temp >= 65535){
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
+  //Rain or Snow
+  Sensor_Buffer[Receipt_Length++] = Sensor_Data.g_Is_Rain_or_Snow;
 
-  }else{
-    if (Sensor_Data.g_Solid_Temp_Flag == 1){
-      #if PR_3000_ECTH_N01
-        SoliTemp_Value = (float)(65536 - Sensor_Data.g_Solid_Temp)  / 100;
-      #else
-        SoliTemp_Value = (float)(65536 - Sensor_Data.g_Solid_Temp)  / 10;
-      #endif
-
-    }else{
-      #if PR_3000_ECTH_N01
-        SoliTemp_Value = (float)Sensor_Data.g_Solid_Temp / 100;
-      #else
-        SoliTemp_Value = (float)Sensor_Data.g_Solid_Temp / 10;
-      #endif
-    }
-
-    PackBCD((char *)Data_BCD, SoliTemp_Value, 4, NumOfDot);
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-
-  if (Sensor_Data.g_Solid_Temp_Flag == 1)
-    Sensor_Buffer[Receipt_Length++] = 0xF0 | NumOfDot;//最高位是1，表示负的数值
-  else
-    Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;//最高位是0，表示正的数值//10
-
-  //Solid humidity土壤湿度
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
-  NumOfDot = 2;
-  
-  if ((int)(Sensor_Data.g_Solid_Humi) > 100){
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-
-  }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_Humi, 4, NumOfDot);//把土壤湿度转换成BCD码
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
-
-  //Solid Cond土壤电导率（土壤EC）
-  NumOfDot = 0;
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));
-
-  if (Sensor_Data.g_Cond >= 65535){
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-
-  }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Cond, 4, NumOfDot);
-
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
-
-  //Solid Salt土壤盐度
-  NumOfDot = 0;
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));
-
-  if (Sensor_Data.g_Salt >= 65535){
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-
-  }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Salt, 4, NumOfDot);
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
-
+  //RTC
   unsigned char date_temp[7];
   Private_RTC.Get_RTC(&date_temp[0]);
   for (unsigned char i = 0; i < 7; i++)
@@ -626,8 +558,8 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[2];
   Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[1];//RSSI
   Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[3];
-
-  unsigned char crc8 = GetCrc8(&Sensor_Buffer[4], 0x34);
+  
+  unsigned char crc8 = GetCrc8(&Sensor_Buffer[4], 0x29);
   Sensor_Buffer[Receipt_Length++] = crc8;
 
   for (unsigned char i = 0; i < 6; i++)

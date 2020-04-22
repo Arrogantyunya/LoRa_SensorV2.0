@@ -48,6 +48,5 @@ private:
 };
 
 extern Receipt Message_Receipt;
-extern unsigned char gLoRaCSQ[4];  //接收LoRa发送和接收的信号强度
 
 #endif

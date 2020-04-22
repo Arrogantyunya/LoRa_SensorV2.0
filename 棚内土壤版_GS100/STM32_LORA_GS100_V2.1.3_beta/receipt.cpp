@@ -384,7 +384,7 @@ void Receipt::Send_Sensor_Data(void)
 		Serial.println("开始查询信号质量");
 		LoRa_MHL9LF.LoRa_AT(gLoRaCSQ, true, AT_CSQ_, 0);
 	}
-
+  
   private_sensor.Get_All_Sensor_Data();
   
   Sensor_Buffer[Receipt_Length++] = 0xFE; //Frame head.
@@ -401,7 +401,6 @@ void Receipt::Send_Sensor_Data(void)
 
   //Air Temperature空气温度
   NumOfDot = 2;
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   if (Sensor_Data.g_Temp > 150){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -521,22 +520,12 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = 0xFF;
   Sensor_Buffer[Receipt_Length++] = 0xE0;
 
-  //TVOC总挥发性有机化合物(Total Volatile Organic Compounds)已弃用
-  //改为了植物位移传感器
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
-  NumOfDot = 0;
-  if ((int)(Sensor_Data.g_Displacement) > 20000){//因为量程只有20mm（20000μm）
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-  }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Displacement, 4, NumOfDot);//把位移转换成BCD码
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
+  //TVOC总挥发性有机化合物(Total Volatile Organic Compounds)
+  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  Sensor_Buffer[Receipt_Length++] = 0xE0;
 
   //Solid temperature土壤温度
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   NumOfDot = 2;
   if (Sensor_Data.g_Solid_Temp >= 65535){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -568,7 +557,7 @@ void Receipt::Send_Sensor_Data(void)
   else
     Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;//最高位是0，表示正的数值//10
 
-  //Solid humidity土壤湿度
+  //Solid humidity
   memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   NumOfDot = 2;
   
@@ -577,7 +566,7 @@ void Receipt::Send_Sensor_Data(void)
     Sensor_Buffer[Receipt_Length++] = 0xFF;
 
   }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_Humi, 4, NumOfDot);//把土壤湿度转换成BCD码
+    PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_Humi, 4, NumOfDot);//把大气湿度转换成BCD码
     Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
     Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
   }

@@ -283,9 +283,8 @@ void Command_Analysis::Query_Current_Work_Para(void)
 
 		unsigned int time_temp = (g_Receive_cmd[10] << 8 | g_Receive_cmd[11]);
 		if (WorkParameter_Info.Save_Collect_Time(time_temp))
-		{
 			g_Get_Para_Flag = true;
-		}
+
 
 		if (g_Receive_cmd[8] == 0X55)
 		{

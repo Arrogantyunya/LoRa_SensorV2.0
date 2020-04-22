@@ -17,7 +17,6 @@ Receipt Message_Receipt;
 #define SEND_DATA_DELAY     500 //Send frame data delay.
 
 unsigned char g_Motor_Status = MotorFactoryMode;  //Default status.
-unsigned char gLoRaCSQ[4] = { 0 };  //接收LoRa发送和接收的信号强度
 
 /*
  @brief   : 清除服务器上一次接收的LoRa数据缓存
@@ -379,18 +378,12 @@ void Receipt::Send_Sensor_Data(void)
   Clear_Server_LoRa_Buffer();
 #endif
 
-  if (gLoRaCSQ[0] == 0 || gLoRaCSQ[1] == 0)
-	{
-		Serial.println("开始查询信号质量");
-		LoRa_MHL9LF.LoRa_AT(gLoRaCSQ, true, AT_CSQ_, 0);
-	}
-
   private_sensor.Get_All_Sensor_Data();
   
   Sensor_Buffer[Receipt_Length++] = 0xFE; //Frame head.
   Sensor_Buffer[Receipt_Length++] = 0xD0; //Frame ID
   Sensor_Buffer[Receipt_Length++] = 0x01;
-  Sensor_Buffer[Receipt_Length++] = 0x34; //Data length
+  Sensor_Buffer[Receipt_Length++] = 0x30; //Data length
   //Sensor type ID
   Sensor_Buffer[Receipt_Length++] = highByte(DEVICE_TYPE_ID); //Sensor type ID
   Sensor_Buffer[Receipt_Length++] = lowByte(DEVICE_TYPE_ID);
@@ -401,7 +394,6 @@ void Receipt::Send_Sensor_Data(void)
 
   //Air Temperature空气温度
   NumOfDot = 2;
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   if (Sensor_Data.g_Temp > 150){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -521,22 +513,12 @@ void Receipt::Send_Sensor_Data(void)
   Sensor_Buffer[Receipt_Length++] = 0xFF;
   Sensor_Buffer[Receipt_Length++] = 0xE0;
 
-  //TVOC总挥发性有机化合物(Total Volatile Organic Compounds)已弃用
-  //改为了植物位移传感器
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
-  NumOfDot = 0;
-  if ((int)(Sensor_Data.g_Displacement) > 20000){//因为量程只有20mm（20000μm）
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-    Sensor_Buffer[Receipt_Length++] = 0xFF;
-  }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Displacement, 4, NumOfDot);//把位移转换成BCD码
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
-    Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
-  }
-  Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;
+  //TVOC总挥发性有机化合物(Total Volatile Organic Compounds)
+  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  Sensor_Buffer[Receipt_Length++] = 0xFF;
+  Sensor_Buffer[Receipt_Length++] = 0xE0;
 
   //Solid temperature土壤温度
-  memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   NumOfDot = 2;
   if (Sensor_Data.g_Solid_Temp >= 65535){
     Sensor_Buffer[Receipt_Length++] = 0xFF;
@@ -568,7 +550,7 @@ void Receipt::Send_Sensor_Data(void)
   else
     Sensor_Buffer[Receipt_Length++] = 0xE0 | NumOfDot;//最高位是0，表示正的数值//10
 
-  //Solid humidity土壤湿度
+  //Solid humidity
   memset(Data_BCD, 0x00, sizeof(Data_BCD));//清零Data_BCD数组
   NumOfDot = 2;
   
@@ -577,7 +559,7 @@ void Receipt::Send_Sensor_Data(void)
     Sensor_Buffer[Receipt_Length++] = 0xFF;
 
   }else{
-    PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_Humi, 4, NumOfDot);//把土壤湿度转换成BCD码
+    PackBCD((char *)Data_BCD, Sensor_Data.g_Solid_Humi, 4, NumOfDot);//把大气湿度转换成BCD码
     Sensor_Buffer[Receipt_Length++] = Data_BCD[0];
     Sensor_Buffer[Receipt_Length++] = Data_BCD[1];
   }
@@ -617,17 +599,9 @@ void Receipt::Send_Sensor_Data(void)
   unsigned char date_temp[7];
   Private_RTC.Get_RTC(&date_temp[0]);
   for (unsigned char i = 0; i < 7; i++)
-  {
     Sensor_Buffer[Receipt_Length++] = date_temp[i];
-  }
 
-  //SNR,RSSI
-  Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[0];//SNR
-  Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[2];
-  Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[1];//RSSI
-  Sensor_Buffer[Receipt_Length++] = gLoRaCSQ[3];
-
-  unsigned char crc8 = GetCrc8(&Sensor_Buffer[4], 0x34);
+  unsigned char crc8 = GetCrc8(&Sensor_Buffer[4], 0x30);
   Sensor_Buffer[Receipt_Length++] = crc8;
 
   for (unsigned char i = 0; i < 6; i++)

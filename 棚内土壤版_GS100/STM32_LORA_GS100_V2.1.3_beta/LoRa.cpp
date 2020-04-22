@@ -388,6 +388,7 @@ void LoRa::Get_CSQ(unsigned char *addr_temp, unsigned char len, unsigned char *d
 		}
 	}
 	Serial.println(String("Str_CSQ = ") + Str_CSQ);
+    
 	Serial.print(String("Str_SNR = "));
     data_buffer[2] == 0xF0?Serial.print("-"):(data_buffer[2] == 0xE0?Serial.print(""):Serial.print("读取错误"));
 	Serial.println(Str_SNR + " (DEC)");
@@ -398,28 +399,6 @@ void LoRa::Get_CSQ(unsigned char *addr_temp, unsigned char len, unsigned char *d
 
 	data_buffer[0] = Str_SNR.toInt();
 	data_buffer[1] = Str_RSSI.toInt();
-}
-
-/*
- @brief     : LoRa返回的回执信息是ASCLL码，将ASCLL码转换成HEX。
- @param     : 1.ASCLL码
-              2.ASCLL码长度
- @return    : true or false
- */
-bool LoRa::String_to_Hex(unsigned char *str, unsigned char len)
-{
-    for (unsigned char i = 0; i < len; i++)
-    {
-        if (str[i] >= '0' && str[i] <= '9')
-            str[i] -= '0';
-        else if (str[i] >= 'A' && str[i] <= 'F')
-            str[i] -= '7';
-        else if (str[i] >= 'a' && str[i] <= 'f')
-            str[i] -= 'W';
-        else
-            return false;
-    }
-    return true;
 }
 
 /*
