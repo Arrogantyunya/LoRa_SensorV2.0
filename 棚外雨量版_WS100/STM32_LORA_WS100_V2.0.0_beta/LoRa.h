@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 #define USE_LORA_RESET  0
+#define Lora_TRMode1	false
+#define Lora_TRMode2	true
+#define Lora_TRMode3	false
 
 //GPIO definition
 #define RESET_PIN       PA1
