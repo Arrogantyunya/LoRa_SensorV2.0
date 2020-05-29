@@ -8,7 +8,7 @@
 #define Lora_TRMode2	true
 #define Lora_TRMode3	false
 
-#define USE_LORA_MODE	0
+#define USE_LORA_MODE	true
 
 //GPIO definition
 #define RESET_PIN       PA5
@@ -124,5 +124,8 @@ private:
 
 /*Create LoRa object*/
 extern LoRa LoRa_MHL9LF;
+
+extern unsigned char Lora_TRMode;
+extern unsigned char LORA_SYNC;
 
 #endif

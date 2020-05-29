@@ -28,7 +28,7 @@
 #define Collect_battery_num		2
 #define SOFT_HARD_VERSION 		true
 #define Software_version_high	0x02
-#define Software_version_low	0x14
+#define Software_version_low	0x20
 #define Hardware_version_high	0x07
 #define Hardware_version_low	0x10
 
@@ -106,6 +106,20 @@ void setup()
 	//Initialize LoRa parameter.
 	if (LoRa_Para_Config.Verify_LoRa_Config_Flag() == false)
 	{
+		if (!LoRa_Para_Config.Verify_LoRa_TRMode_Flag())
+		{
+			LoRa_Para_Config.Save_LoRa_TRMode(0x01);//保存为默认状态，也就是模式1
+		}
+		Lora_TRMode = LoRa_Para_Config.Read_LoRa_TRMode();
+		Serial.println(String("Lora_TRMode = ") + String(Lora_TRMode,HEX));
+
+		if (!LoRa_Para_Config.Verify_LoRa_SYNC_Flag())
+		{
+			LoRa_Para_Config.Save_LoRa_SYNC(0x34);//同步字默认设置为0x34
+		}
+		LORA_SYNC = LoRa_Para_Config.Read_LoRa_SYNC();
+		Serial.println(String("LORA_SYNC = ") + String(LORA_SYNC));
+	
 		LoRa_MHL9LF.Parameter_Init(All_parameter);//设置所有的参数
 		LoRa_MHL9LF.IsReset(true);
 		LoRa_MHL9LF.Mode(PASS_THROUGH_MODE);
@@ -186,7 +200,7 @@ void loop()
 {
 	Debug_Project();//现场调试模式
 
-	// Sleep();//进入停机模式
+	Sleep();//进入停机模式
 }
 
 /*
@@ -347,11 +361,23 @@ void Serial_Port_Configuration(void)
 		}
 		else if (comdata.startsWith("SET_LORA_TRMODE="))//SET_LORA_TRMODE=1 
 		{
-			// Serial.println("设置LoRa的TRMode");
-			// String x = comdata.substring(comdata.indexOf("="),comdata.length());//可以配合indexOf使用
-			// Serial.println("x = " + x);
-			// unsigned char i = unsigned char (x.toInt());//所以使用long来接收
-			// Serial.println("i = " + i);
+			Serial.println("设置LoRa的TRMode");
+			String Str_x = comdata.substring(comdata.indexOf("=")+1,comdata.length());//可以配合indexOf使用
+			unsigned char x = (unsigned char) Str_x.toInt();//使用long来接收,所以强转为unsigned char
+			LoRa_Para_Config.Save_LoRa_TRMode(x);
+			Lora_TRMode = LoRa_Para_Config.Read_LoRa_TRMode();
+		}
+		else if (comdata.startsWith("SET_LORA_SYNC="))//SET_LORA_SYNC=12
+		{
+			Serial.println("设置LoRa的SYNC");
+			String Str_x = comdata.substring(comdata.indexOf("=")+1,comdata.length());//可以配合indexOf使用
+			unsigned char x = (unsigned char) Str_x.toInt();//使用long来接收,所以强转为unsigned char
+			LoRa_Para_Config.Save_LoRa_SYNC(x);
+			LORA_SYNC = LoRa_Para_Config.Read_LoRa_SYNC();
+		}
+		else if(comdata == String("LORA_INIT"))
+		{
+			LoRa_MHL9LF.Parameter_Init(All_parameter);//LORA参数设置
 		}
 		else
 		{

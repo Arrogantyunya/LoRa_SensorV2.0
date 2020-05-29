@@ -585,7 +585,12 @@ bool LoRa_Config::Verify_LoRa_TRMode_Flag(void)//验证Lora的TRmode是否被配
     if (AT24CXX_ReadOneByte(Lora_TRMode_Set_ADDR) == 0x55)
         return true;
 	else
+	{
+		EEPROM_Write_Enable();
+		AT24CXX_WriteOneByte(Lora_TRMode_Set_ADDR, 0x55);
+		EEPROM_Write_Disable();
 		return false;
+	}
 }
 
 bool LoRa_Config::Save_LoRa_TRMode(unsigned char TRMode)//保存TRMode
@@ -612,7 +617,12 @@ bool LoRa_Config::Verify_LoRa_SYNC_Flag(void)//验证Lora的SYNC是否被配置�
     if (AT24CXX_ReadOneByte(Lora_SYNC_Set_ADDR) == 0x55)
 		return true;
 	else
+	{
+		EEPROM_Write_Enable();
+		AT24CXX_WriteOneByte(Lora_SYNC_Set_ADDR, 0x55);
+		EEPROM_Write_Disable();
 		return false;
+	}
 }
 
 bool LoRa_Config::Save_LoRa_SYNC(unsigned char SYNC)//保存SYNC

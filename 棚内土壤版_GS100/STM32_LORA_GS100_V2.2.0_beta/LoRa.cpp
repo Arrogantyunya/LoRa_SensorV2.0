@@ -23,6 +23,9 @@
 /*Create LoRa object*/
 LoRa LoRa_MHL9LF;
 
+unsigned char Lora_TRMode;
+unsigned char LORA_SYNC;
+
 /*
  @brief     : 配置LoRa模块相关引脚
  @param     : 无
@@ -639,24 +642,34 @@ void LoRa::Parameter_Init(bool only_net)
             StatusBuffer[i++] = Param_Check(AT_MADDR_, "71000000", false);
             StatusBuffer[i++] = Param_Check(AT_RIQ_, "00", true); 
 
-            #if Lora_TRMode1
+            if (Lora_TRMode == 0x01)
+			{
 				StatusBuffer[i++] = Param_Check(AT_TFREQ_, "1C578DE0", false);//475.500.000
 				StatusBuffer[i++] = Param_Check(AT_RFREQ_, "1C03A180", false);//470.000.000
-			#elif Lora_TRMode2
+			}
+			else if (Lora_TRMode == 0x02)
+			{
 				StatusBuffer[i++] = Param_Check(AT_TFREQ_, "1CFC5960", false);//486.300.000
 				StatusBuffer[i++] = Param_Check(AT_RFREQ_, "1CF7C580", false);//486.000.000
-			#elif Lora_TRMode3
-				StatusBuffer[i++] = Param_Check(AT_TFREQ_, "1CFC5960", false);//486.300.000
-				StatusBuffer[i++] = Param_Check(AT_RFREQ_, "1CF7C580", false);//486.000.000
-			#else
-			#endif
+			}
+			else
+			{
+				Serial.println(String("不存在的Lora_TRMode：") + Lora_TRMode + ".配置为初始模式");
+				StatusBuffer[i++] = Param_Check(AT_TFREQ_, "1C578DE0", false);//475.500.000
+				StatusBuffer[i++] = Param_Check(AT_RFREQ_, "1C03A180", false);//470.000.000
+			}
 
             #if USE_LORA_MODE
-            if (LoRa_Para_Config.Read_LoRa_Com_Mode() == 0xF1)
-                StatusBuffer[i++] = Param_Check(AT_NET_, "01", true);    //配置成网关模式
-            else
-                StatusBuffer[i++] = Param_Check(AT_NET_, "00", true);    //配置成节点模式
-
+                if (LoRa_Para_Config.Read_LoRa_Com_Mode() == 0xF1)//配置成网关模式
+                {
+                    StatusBuffer[i++] = Param_Check(AT_NET_, "01", true);
+                    Serial.println("网关模式");
+                }    
+                else//配置成节点模式
+                {
+                    StatusBuffer[i++] = Param_Check(AT_NET_, "00", true); 
+                    Serial.println("节点模式");
+                }
             #else
               StatusBuffer[i++] = Param_Check(AT_NET_, "01", true);//默认配置为网关    
             #endif
@@ -667,7 +680,15 @@ void LoRa::Parameter_Init(bool only_net)
             StatusBuffer[i++] = Param_Check(AT_BW_, "07", false); 
             StatusBuffer[i++] = Param_Check(AT_POW_, "14", false);
             StatusBuffer[i++] = Param_Check(AT_TIQ_, "00", true); 
-			StatusBuffer[i++] = Param_Check(AT_SYNC_, "34", true);
+
+			if (LORA_SYNC == 0x34)
+			{
+				StatusBuffer[i++] = Param_Check(AT_SYNC_, "34", false);
+			}
+			else if (LORA_SYNC == 0x12)
+			{
+				StatusBuffer[i++] = Param_Check(AT_SYNC_, "12", false);
+			}
         }
         else
         {

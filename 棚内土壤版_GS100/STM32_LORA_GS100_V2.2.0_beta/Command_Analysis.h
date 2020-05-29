@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-#define Only_net				1
-#define All_parameter			0
+#define Only_net				  true
+#define All_parameter			false
 
 
 enum Frame_ID{
