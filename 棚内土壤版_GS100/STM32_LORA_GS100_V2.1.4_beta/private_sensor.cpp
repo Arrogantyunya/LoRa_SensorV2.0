@@ -55,7 +55,7 @@ void Sensor::Get_All_Sensor_Data(void)
 	Serial.println(Sensor_Data.g_Solid_Temp / 100);
 	Serial.print("Solid humility: ");
 	Serial.println(Sensor_Data.g_Solid_Humi);
-#elif PR_3000_ECTH_N01_V2
+#elif (PR_3000_ECTH_N01_V2 || ZT_T_33_V1)
     Serial.print("Solid temperature: ");
 	Serial.println(Sensor_Data.g_Solid_Temp / 10);
 	Serial.print("Solid humility: ");
@@ -139,10 +139,8 @@ bool Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
 {
 #if PR_3000_ECTH_N01_V1
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00 };
-#elif PR_3000_ECTH_N01_V2
+#elif (PR_3000_ECTH_N01_V2 || ZT_T_33_V1)
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00 };
-#else
-	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00 };
 #endif
 	unsigned char Receive_Data[10] = { 0 };
 	unsigned char Length = 0;
@@ -150,6 +148,20 @@ bool Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
 	float hum = 65535.0;
 	unsigned int humi_temp = 0xFFFF, tem_temp = 0xFFFF;
 	unsigned char temperature_flag = 0;
+
+	/* 某些版本的RS485设备可能在上电时会有异常字符发出，在这里清空掉 */
+	while (RS485_Serial.available() > 0) 
+	{
+		if (Length >= 9)
+		{
+			Serial.println("异常字符过多，请检查RS485设备是否正常 <Read_Solid_Humi_and_Temp>");
+			Length = 0;
+			break;
+		}
+		Serial.print(RS485_Serial.read());
+		Length++;
+	}
+	Length = 0;
 
 	Send_Cmd[0] = addr; //Get sensor address
 
@@ -195,17 +207,27 @@ bool Sensor::Read_Solid_Humi_and_Temp(float* humi, unsigned int* temp, unsigned 
 
 	if (Receive_CRC16 == Verify_CRC16) {
 		if (Receive_Data[0] == 0) {
-			humi_temp = Receive_Data[4] << 8 | Receive_Data[5];
-			tem_temp = Receive_Data[6] << 8 | Receive_Data[7];
+			#if (PR_3000_ECTH_N01_V1 || PR_3000_ECTH_N01_V2)
+				humi_temp = Receive_Data[4] << 8 | Receive_Data[5];
+				tem_temp = Receive_Data[6] << 8 | Receive_Data[7];
+			#elif ZT_T_33_V1
+				humi_temp = Receive_Data[4] << 8 | Receive_Data[5];
+				tem_temp = Receive_Data[6] << 8 | Receive_Data[7];
+			#endif
 		}
 		else {
-			humi_temp = Receive_Data[3] << 8 | Receive_Data[4];
-			tem_temp = Receive_Data[5] << 8 | Receive_Data[6];
+			#if (PR_3000_ECTH_N01_V1 || PR_3000_ECTH_N01_V2)
+				humi_temp = Receive_Data[3] << 8 | Receive_Data[4];
+				tem_temp = Receive_Data[5] << 8 | Receive_Data[6];
+			#elif ZT_T_33_V1
+				humi_temp = Receive_Data[5] << 8 | Receive_Data[6];
+				tem_temp = Receive_Data[3] << 8 | Receive_Data[4];
+			#endif
 		}
 
 #if PR_3000_ECTH_N01_V1
 		hum = (float)humi_temp / 100.0;
-#elif PR_3000_ECTH_N01_V2
+#elif (PR_3000_ECTH_N01_V2 || ZT_T_33_V1)
 		hum = (float)humi_temp / 10.0;
 #else
 		hum = (float)humi_temp / 10.0;
@@ -248,6 +270,20 @@ bool Sensor::Read_Soild_PH(unsigned int * Solid_PH, unsigned char addr)
 	Send_CRC16 = N_CRC16(Send_Cmd, 6);
 	Send_Cmd[6] = Send_CRC16 >> 8;
 	Send_Cmd[7] = Send_CRC16 & 0xFF;
+
+	/* 某些版本的RS485设备可能在上电时会有异常字符发出，在这里清空掉 */
+	while (RS485_Serial.available() > 0) 
+	{
+		if (Length >= 9)
+		{
+			Serial.println("异常字符过多，请检查RS485设备是否正常 <Read_Solid_Humi_and_Temp>");
+			Length = 0;
+			break;
+		}
+		Serial.print(RS485_Serial.read());
+		Length++;
+	}
+	Length = 0;
 
 	RS485_Serial.write(Send_Cmd, 8);
 	delay(300);
@@ -309,7 +345,7 @@ bool Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned
 {
 #if PR_3000_ECTH_N01_V1
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00 };
-#elif PR_3000_ECTH_N01_V2
+#elif (PR_3000_ECTH_N01_V2 || ZT_T_33_V1)
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00 };
 #else
 	unsigned char Send_Cmd[8] = { 0x01, 0x03, 0x00, 0x14, 0x00, 0x02, 0x00, 0x00 };
@@ -325,6 +361,20 @@ bool Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned
 	Send_CRC16 = N_CRC16(Send_Cmd, 6);
 	Send_Cmd[6] = Send_CRC16 >> 8;
 	Send_Cmd[7] = Send_CRC16 & 0xFF;
+
+	/* 某些版本的RS485设备可能在上电时会有异常字符发出，在这里清空掉 */
+	while (RS485_Serial.available() > 0) 
+	{
+		if (Length >= 9)
+		{
+			Serial.println("异常字符过多，请检查RS485设备是否正常 <Read_Solid_Humi_and_Temp>");
+			Length = 0;
+			break;
+		}
+		Serial.print(RS485_Serial.read());
+		Length++;
+	}
+	Length = 0;
 
 	RS485_Serial.write(Send_Cmd, 8);
 	delay(300);
@@ -367,6 +417,10 @@ bool Sensor::Read_Salt_and_Cond(unsigned int* salt, unsigned int* cond, unsigned
 	
 
 	*salt = salt_temp;
-	*cond = cond_temp;
+	#if (PR_3000_ECTH_N01_V1 || PR_3000_ECTH_N01_V2)
+		*cond = cond_temp;
+	#elif ZT_T_33_V1
+		*cond = cond_temp/10;
+	#endif
 	return 1;
 }

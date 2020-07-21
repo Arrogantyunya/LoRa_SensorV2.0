@@ -515,7 +515,7 @@ void Receipt::Send_Sensor_Data(void)
     if (Sensor_Data.g_Solid_Temp_Flag == 1){
       #if PR_3000_ECTH_N01_V1
         SoliTemp_Value = (float)(65536 - Sensor_Data.g_Solid_Temp)  / 100;
-      #elif PR_3000_ECTH_N01_V2
+      #elif (PR_3000_ECTH_N01_V2 || ZT_T_33_V1)
         SoliTemp_Value = (float)(65536 - Sensor_Data.g_Solid_Temp)  / 10;
       #else
         SoliTemp_Value = (float)(65536 - Sensor_Data.g_Solid_Temp)  / 10;
@@ -524,7 +524,7 @@ void Receipt::Send_Sensor_Data(void)
     }else{
       #if PR_3000_ECTH_N01_V1
         SoliTemp_Value = (float)Sensor_Data.g_Solid_Temp / 100;
-      #elif PR_3000_ECTH_N01_V2
+      #elif (PR_3000_ECTH_N01_V2 || ZT_T_33_V1)
         SoliTemp_Value = (float)(Sensor_Data.g_Solid_Temp)  / 10;
       #else
         SoliTemp_Value = (float)Sensor_Data.g_Solid_Temp / 10;

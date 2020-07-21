@@ -4,7 +4,8 @@
 #define LUX_UV            true
 
 #define PR_3000_ECTH_N01_V1  false  //未升级前的3合1传感器
-#define PR_3000_ECTH_N01_V2  true   //升级后的3合1传感器
+#define PR_3000_ECTH_N01_V2  false   //升级后的3合1传感器
+#define ZT_T_33_V1           true   //另一家的3合1传感器
 
 #define ST_500_Soil_PH		false//一款长的PH，第一代的PH
 #define JXBS_3001_PH      true//两根针的款式，第二代的PH
